@@ -65,15 +65,37 @@ var diffVis = {
 };
 Map.addLayer(ndviDiff, diffVis, 'NDVI change ' + earlyYear + ' -> ' + lateYear);
 
-// --- 6. Optional: export the change raster to inspect in QGIS with OSM roads --
-// Uncomment to queue an export to your Google Drive.
-// Export.image.toDrive({
-//   image: ndviDiff,
-//   description: 'ndvi_change_' + earlyYear + '_' + lateYear,
-//   region: aoi,
-//   scale: 10,
-//   maxPixels: 1e9
-// });
+// --- 6. On-map legend --------------------------------------------------------
+var legend = ui.Panel({style: {position: 'bottom-left', padding: '8px 10px'}});
+legend.add(ui.Label('NDVI change ' + earlyYear + ' → ' + lateYear,
+  {fontWeight: 'bold', fontSize: '13px', margin: '0 0 4px 0'}));
+legend.add(ui.Label('■ brown  —  disturbance / active use',
+  {color: '8c510a', fontSize: '11px', margin: '1px 0'}));
+legend.add(ui.Label('■ green  —  regrowth / abandonment',
+  {color: '01665e', fontSize: '11px', margin: '1px 0'}));
+Map.add(legend);
+
+// --- 7. Export for figure composition ----------------------------------------
+// The rendered (RGB) change map, ready to drop into tools/compose_figure.py.
+var diffRGB = ndviDiff.visualize(diffVis);
+
+// (a) Quick PNG: click this printed URL to download a thumbnail.
+print('Thumbnail PNG (click to download):',
+  diffRGB.getThumbURL({dimensions: 1400, region: aoi, format: 'png'}));
+
+// (b) Full-resolution rendered export to Google Drive -> compose_figure.py.
+Export.image.toDrive({
+  image: diffRGB,
+  description: 'ndvi_change_' + earlyYear + '_' + lateYear,
+  region: aoi, scale: 10, maxPixels: 1e9
+});
+
+// (c) Raw single-band NDVI-change raster for QGIS + OpenStreetMap road overlay.
+Export.image.toDrive({
+  image: ndviDiff.toFloat(),
+  description: 'ndvi_change_raw_' + earlyYear + '_' + lateYear,
+  region: aoi, scale: 10, maxPixels: 1e9
+});
 
 print('AOI area (km^2):', aoi.area().divide(1e6));
-print('Tip: pull OSM roads for this area (Geofabrik / Overpass) and overlay in QGIS.');
+print('Next: compose the export into results/ndvi_change.png (see results/README.md).');

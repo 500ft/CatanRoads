@@ -73,6 +73,19 @@ of interest. On the roadmap: automated branch detection and trail tracing,
 corridor grouping, quantitative activity classification, and validation against
 ground truth. See [`docs/design.md`](docs/design.md).
 
+## Results
+
+![NDVI-change map over an area of interest](results/ndvi_change.png)
+
+*Example output. Brown marks vegetation loss / surface disturbance (evidence of
+active use); green marks regrowth (evidence of abandonment); linear features are
+candidate route corridors. Contains modified Copernicus Sentinel-2 data,
+processed in Google Earth Engine.*
+
+> The figure above is a placeholder. Generate one for any area of interest with
+> the workflow below; see [`results/`](results/) for the one-command compose step
+> that adds the title, legend, scale bar, and attribution.
+
 ## Reproduce the exploratory analysis
 
 1. Open the [Google Earth Engine Code Editor](https://code.earthengine.google.com/).
