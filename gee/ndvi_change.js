@@ -1,5 +1,5 @@
 /**
- * Desire Lines — composite surface-disturbance change (Phase 1)
+ * Catan Roads — composite surface-disturbance change (Phase 1)
  * ------------------------------------------------------------
  * Paste into the Earth Engine Code Editor: https://code.earthengine.google.com/
  *

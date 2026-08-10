@@ -19,7 +19,7 @@ widen, braid into parallel ruts, and revegetate when disused. Detecting them
 matters for logistics and transport planning, disaster response, connectivity
 mapping for herder communities, and monitoring the footprint of off-road travel.
 
-Desire Lines is **not** an NDVI road classifier. A single vehicle track is
+Catan Roads is **not** an NDVI road classifier. A single vehicle track is
 ~2.5–3 m wide and therefore **sub-pixel** at Sentinel-2's 10 m resolution. So the
 method targets what a medium-resolution sensor *can* honestly resolve:
 **persistent, corridor-scale surface disturbance** — braided corridors, clusters

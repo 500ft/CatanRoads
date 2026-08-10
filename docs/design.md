@@ -1,4 +1,4 @@
-# Design — Desire Lines
+# Design — Catan Roads
 
 This document is the **technical design** for the project — the full methodology
 that the current early-stage tooling (see the README) is built toward. It is
