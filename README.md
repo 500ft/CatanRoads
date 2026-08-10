@@ -72,23 +72,38 @@ confound, and a road-free negative control) are declared in
 ## Status & roadmap
 
 Early development. **In place:** the reframed problem, the composite-disturbance
-Earth Engine pipeline (`gee/ndvi_change.js`), the site manifest, and the figure
-workflow. **Next (Phase 1 gate):** produce a real Mongolia disturbance figure and
-confirm it survives the negative control. **Then:** raster→vector candidate
-extraction, network conditioning, and corridor-level evaluation. See
-[`docs/design.md`](docs/design.md).
+Earth Engine pipeline (`gee/ndvi_change.js`), the site manifest, the figure
+workflow, and a **Phase-2 candidate extractor validated on synthetic corridors**
+([`analysis/`](analysis/), 5/5 tests). **Next (Phase 1 gate):** produce a real
+Mongolia disturbance figure and confirm it survives the negative control — only
+then is the extractor run on real data. **Then:** network conditioning and
+corridor-level evaluation. See [`docs/design.md`](docs/design.md).
 
 ## Results
 
+### Real-world results — pending the Phase-1 gate
+
 ![Candidate surface-disturbance map over an area of interest](results/ndvi_change.png)
 
-*Example output. Brown marks locally anomalous, persistent surface disturbance
-(a candidate corridor for high-resolution confirmation); teal marks
-greening/recovery. No active/abandoned claim is made without validation. Contains
-modified Copernicus Sentinel-2 data, processed in Google Earth Engine.*
+*Brown marks locally anomalous, persistent surface disturbance (a candidate
+corridor for high-resolution confirmation); teal marks greening/recovery. No
+active/abandoned claim is made without validation. Contains modified Copernicus
+Sentinel-2 data, processed in Google Earth Engine.*
 
-> The figure above is a placeholder. Generate one with the workflow below; see
-> [`results/`](results/) for the one-command compose step.
+> **Placeholder.** No real-imagery result is claimed yet: per the go/no-go gate, a
+> Mongolia result is only reported once the disturbance signal is shown to survive
+> a road-free negative control (see [`docs/design.md`](docs/design.md)). Generate a
+> map with the workflow below; [`results/`](results/) has the compose step.
+
+### Method demonstration (synthetic)
+
+![Synthetic method demonstration](results/method_demo_synthetic.png)
+
+*Known-truth synthetic scene. The Phase-2 ridge + connected-component extractor
+([`analysis/`](analysis/)) localizes curved, braided, and broken corridors and
+**rejects the round blob and background noise** — the tooling analogue of the
+negative-control gate (5/5 unit tests green). This validates the extractor; it is
+**not** a Mongolia result. Reproduce: `python analysis/demo_synthetic.py`.*
 
 ## Reproduce the analysis
 

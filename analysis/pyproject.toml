@@ -1,0 +1,22 @@
+[project]
+name = "catanroads"
+version = "0.1.0"
+description = "Candidate corridor extraction from surface-disturbance rasters (Catan Roads, Phase 2)."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+# Core baseline runs on numpy + scipy only (no heavy geospatial stack required).
+dependencies = ["numpy>=1.24", "scipy>=1.10"]
+
+[project.optional-dependencies]
+# The fuller pipeline (skeleton + graph tracing, richer geometry, raster/vector I/O).
+full = ["scikit-image>=0.22", "shapely>=2.0", "geopandas>=0.14", "rasterio>=1.3", "networkx>=3.0"]
+dev = ["pytest>=7.0", "matplotlib>=3.6"]
+
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["catanroads*"]

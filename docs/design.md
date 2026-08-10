@@ -225,6 +225,10 @@ AOIs *without* comparable response in the negative controls.
 with unit tests on synthetic curved/broken/braided corridors. Output GeoJSON with
 geometry, length, orientation, width estimate, persistence, and uncertainty per
 candidate. Compare connected-components / Hough / ridge / skeleton extractors.
+*Status: a numpy/scipy ridge + connected-component baseline is implemented and
+synthetic-tested in [`../analysis/`](../analysis/) (5/5 tests, incl. a road-free
+noise control); skeleton + graph tracing and shapely/rasterio I/O are the `full`
+optional extra. The extractor is applied to real imagery only after the Phase-1 gate.*
 
 **Phase 3 — Network conditioning and corridor grouping.** Load a versioned
 OSM/Geofabrik extract, buffer mapped roads by resolution + geolocation uncertainty,
