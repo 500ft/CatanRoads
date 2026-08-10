@@ -1,4 +1,4 @@
-# Desire Lines
+# Catan Roads
 
 **Detecting active and abandoned informal route corridors in Mongolia from
 multi-year satellite imagery.**
