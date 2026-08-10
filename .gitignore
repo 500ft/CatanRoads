@@ -1,0 +1,25 @@
+# Data & imagery exports (keep the repo light)
+data/
+exports/
+*.tif
+*.tiff
+*.geojson
+*.gpkg
+*.zip
+*.osm.pbf
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.ipynb_checkpoints/
+
+# QGIS
+*.qgz~
+*.qgd
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
