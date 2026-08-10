@@ -15,9 +15,18 @@
  */
 
 // --- 1. Area of interest -----------------------------------------------------
-// EDIT THIS to a rural region you know. Default: a patch of central Mongolia.
-// [west, south, east, north] in degrees.
-var aoi = ee.Geometry.Rectangle([106.00, 47.60, 106.40, 47.90]);
+// Right-click a spot in Google Maps and copy the two numbers it shows — they are
+// (latitude, longitude), IN THAT ORDER. Paste them below; the script builds a
+// small box around that point, so you never worry about coordinate order or size.
+//
+// (Earth Engine geometries use [lon, lat] — the OPPOSITE of Google Maps — which is
+// the usual reason a pasted coordinate "jumps to the wrong place". Giving a center
+// point plus a size avoids the swap and keeps the box a sensible size.)
+var centerLat = 47.9200;   // Google Maps: the FIRST number
+var centerLon = 106.9000;  // Google Maps: the SECOND number
+var halfKm    = 8;         // half-size of the box in km (8 -> ~16 x 16 km area)
+
+var aoi = ee.Geometry.Point([centerLon, centerLat]).buffer(halfKm * 1000).bounds();
 
 // --- 2. Comparison years (SAME month) ---------------------------------------
 var earlyYear = 2019;
