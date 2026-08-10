@@ -98,11 +98,11 @@ def main() -> None:
     cax.set_xticks([]); cax.set_yticks([])
     for s in cax.spines.values():
         s.set_edgecolor("#cfd6d1")
-    cax.text(-0.02, 0.5, "surface disturbance\n(active use)", transform=cax.transAxes,
+    cax.text(-0.02, 0.5, "candidate\ndisturbance", transform=cax.transAxes,
              ha="right", va="center", fontsize=8.3, color=MUTED)
-    cax.text(1.02, 0.5, "vegetation regrowth\n(abandonment)", transform=cax.transAxes,
+    cax.text(1.02, 0.5, "greening /\nrecovery", transform=cax.transAxes,
              ha="left", va="center", fontsize=8.3, color=MUTED)
-    cax.set_title("NDVI change", fontsize=9, color=INK, pad=4)
+    cax.set_title("candidate surface disturbance", fontsize=9, color=INK, pad=4)
 
     # --- attribution (required for Sentinel-2 redistribution) ---
     yrs = f" ({args.year_attr})" if args.year_attr else ""

@@ -29,10 +29,12 @@ updates automatically (same filename, no edits needed).
 
 ## Caption template
 
-> **NDVI change, `<region>`, `<year1>`→`<year2>` (July).** Brown marks vegetation
-> loss / surface disturbance (evidence of active use); green marks regrowth
-> (evidence of abandonment). Linear features are candidate route corridors.
-> Contains modified Copernicus Sentinel-2 data, processed in Google Earth Engine.
+> **Candidate surface disturbance, `<region>`, `<early-window>` vs `<recent-window>` (July).**
+> Brown marks locally anomalous, persistent surface disturbance (a candidate
+> corridor for high-resolution confirmation); teal marks greening/recovery.
+> Persistent, corridor-scale linear features are the target; no active/abandoned
+> claim is made without validation. Contains modified Copernicus Sentinel-2 data,
+> processed in Google Earth Engine.
 
 ## Attribution & licensing
 

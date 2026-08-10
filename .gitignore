@@ -7,6 +7,8 @@ exports/
 *.gpkg
 *.zip
 *.osm.pbf
+# ...but keep tracked config (e.g. the study-site manifest)
+!config/*.geojson
 
 # Python
 __pycache__/

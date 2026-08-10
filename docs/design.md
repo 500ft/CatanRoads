@@ -5,6 +5,15 @@ that the current early-stage tooling (see the README) is built toward. It is
 deliberately explicit about where the hard problems and the unproven assumptions
 are, so that results are never claimed beyond what the method supports.
 
+> **Operative framing (2026 review).** This is *not* an NDVI road classifier. It
+> is a **network-conditioned method for finding persistent surface-disturbance
+> corridors that may represent unmapped informal roads**, whose deliverable is a
+> **prioritized candidate list for higher-resolution confirmation**. That framing
+> matches Sentinel-2's limits (a 2.5–3 m track is sub-pixel at 10 m) and keeps the
+> project scientifically defensible. The sections below record the original vision;
+> the **[Developed execution plan](#developed-execution-plan-phase-04)** at the end
+> supersedes the earlier "experiment structure" and is what the code is built to.
+
 ## Refined problem definition
 
 > Detect active informal roads and abandoned tracks in Mongolia by analyzing
@@ -15,7 +24,9 @@ are, so that results are never claimed beyond what the method supports.
 
 The system is not searching the country blindly. It uses mapped intersections as
 seed nodes, searches outward within a radius, detects candidate unmapped
-branches, follows them, and classifies their activity state over time.
+branches, follows them, and flags a **candidate** activity state over time. (Per
+the reframe above, "active/abandoned" is a post-validation goal, not a claim the
+current method makes — public wording stays "candidate disturbance/recovery.")
 
 ## System logic
 
@@ -146,6 +157,95 @@ the project produces plausible maps, not defensible results.
   scraped commercial provider.
 - **Short archive** — three years (2024–2026) may be noise; use the longest
   consistent archive available, ideally five or more.
+
+## Design decisions (2026 review)
+
+1. **Target corridors, not single tracks.** A 2.5–3 m track is sub-pixel at 10 m
+   (and BSI pulls in a 20 m SWIR band). Detect braided corridors, parallel-track
+   clusters, and network-scale disturbance; prioritize candidates for high-res
+   inspection. This makes the *braided-corridor* idea the distinctive contribution.
+2. **Do not hard-mask cropland/built land.** That would erase real branches near
+   settlements, and WorldCover is a static 2021 product ill-suited to a 2019–2026
+   comparison. Hard-exclude only permanent water/snow; treat cropland/built as
+   evaluation strata and confounds, and detect land-cover *transitions* as confounds.
+3. **NDVI and bare-soil are related, not independent.** They share bands, so their
+   agreement is one **composite disturbance score** (ΔNDVI, ΔBSI, local-control
+   normalization, persistence; optional Sentinel-1 roughness later) — not two
+   independent confirmations.
+4. **Hough is a baseline, not the method.** Mongolian routes curve, split, and
+   braid. Compare thresholded connected components, probabilistic Hough, multiscale
+   ridge filtering, and skeletonization + graph tracing; the ridge/skeleton pipeline
+   is the likely method.
+5. **OSM seeds are a score, not a hard gate.** Keep both all-area and
+   network-conditioned candidate sets; the seeded-vs-unseeded ablation is itself a
+   headline result.
+6. **Validate corridors, not pixels.** Fully label evaluation *tiles* (not
+   cherry-picked tracks), use positive/negative/uncertain corridor labels,
+   site-level holdouts, object-level precision/recall with a centerline-distance
+   tolerance, length-weighted completeness, and per-site bootstrap CIs.
+
+### Developments beyond the review
+
+- **Two-stage by design, not as a fallback.** The deliverable is a coarse, free,
+  scalable **candidate generator feeding targeted high-resolution confirmation** —
+  adopted as the primary architecture from Phase 0, because it is the honest and
+  strongest framing of what a 10 m sensor can do.
+- **Resolution honesty is a reported result.** Characterize the minimum corridor
+  width / braiding Sentinel-2 can resolve; this is publishable regardless of outcome.
+- **Negative-control gate is quantitative and pre-registered.** Development-site
+  disturbance must exceed the road-free control by a stated margin *before* any line
+  extraction — the single most important gate (see below).
+- **Local-control normalization implemented in code**, so the README's "compared
+  against controls" is true, not aspirational (`gee/ndvi_change.js`, focal z-score).
+- **Provenance manifest on every artifact** (inputs, dates, scene counts, code
+  version), emitted by the Earth Engine run and required for each exported raster.
+
+## Developed execution plan (Phase 0–4)
+
+Supersedes the earlier "Experiment structure". Sites are declared in
+`config/sites.geojson` (development, holdout, confound, negative control).
+
+**Phase 0 — Honest benchmark foundation.** Finalize `config/sites.geojson` with
+≥3 development AOIs, 1 untouched holdout, ≥1 braided corridor, ≥1 recovering
+corridor, ≥1 environmental confound, and ≥1 road-free negative control — each with
+coordinates, rationale, reference-imagery date, and provenance. Change all public
+wording from "active/abandoned" to "candidate disturbance/recovery".
+
+**Phase 1 — Temporal evidence cube.** Replace two-date comparison with annual,
+same-season composites (early 2019–2021, recent 2024–2026), retaining every annual
+composite. Compute disturbance magnitude, temporal trend, persistence, and
+local-control-normalized change; export float GeoTIFFs plus a machine-readable run
+manifest. **Deliverable:** one real Mongolia figure (RGB context, early/recent
+composites, feature channels, composite disturbance, negative controls).
+**Gate:** proceed only if coherent corridor-scale signal appears in ≥2 development
+AOIs *without* comparable response in the negative controls.
+
+**Phase 2 — Raster→vector candidate extraction.** A proper Python package
+(`pyproject.toml`, `rasterio`, `geopandas`, `scikit-image`, `shapely`, `networkx`)
+with unit tests on synthetic curved/broken/braided corridors. Output GeoJSON with
+geometry, length, orientation, width estimate, persistence, and uncertainty per
+candidate. Compare connected-components / Hough / ridge / skeleton extractors.
+
+**Phase 3 — Network conditioning and corridor grouping.** Load a versioned
+OSM/Geofabrik extract, buffer mapped roads by resolution + geolocation uncertainty,
+score proximity to endpoints/rural intersections, compare seeded vs unseeded
+detection, group parallel segments into corridors, and keep observed geometry
+separate from inferred connections.
+
+**Phase 4 — Evaluation.** Freeze the annotation protocol *before* threshold tuning.
+Report candidate precision/recall, corridor completeness, false positives by land
+cover, seeded-vs-unseeded ablation, Hough-vs-ridge/skeleton, development-vs-holdout
+results, and candidate activity classification only if temporal labels are credible.
+
+### Go / no-go
+
+Cap Phase 0–1 at one weekend. **The gate:** can the Phase-1 disturbance signal
+survive the negative controls before any line extraction is attempted? If
+Sentinel-2 cannot expose corridor-scale structure after temporal normalization, do
+**not** spend weeks tuning line detectors. Pivot to: (1) detect only braided/wide
+corridors; (2) use Sentinel-2 as a coarse candidate generator with high-resolution
+confirmation — the strongest portfolio framing; or (3) reframe as a reproducible
+study of *when* medium-resolution imagery fails to resolve informal-track networks.
 
 ## Attribution
 

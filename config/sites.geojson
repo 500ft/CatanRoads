@@ -1,0 +1,85 @@
+{
+  "type": "FeatureCollection",
+  "_comment": "Phase-0 study-site manifest. Each Point is a box CENTER; the box is center.buffer(half_km). Coordinates are UNVERIFIED starting guesses in the named regions — open each in high-resolution imagery, confirm the described feature exists, set verified=true, and record the reference-imagery date. Never report results from a site whose 'verified' is false.",
+  "_schema": {
+    "id": "stable slug",
+    "stratum": "development | holdout | confound | negative_control",
+    "role": "what this site tests",
+    "center_lat": "degrees (Google Maps first number)",
+    "center_lon": "degrees (Google Maps second number)",
+    "half_km": "half box size in km",
+    "expected_feature": "what should be visible",
+    "rationale": "why this site is in the set",
+    "ref_imagery_date": "date of the high-res image used to confirm the feature",
+    "provenance": "source of the coordinate / confirmation",
+    "verified": "false until visually confirmed"
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {"type": "Point", "coordinates": [102.30, 47.30]},
+      "properties": {
+        "id": "dev-01-braided", "stratum": "development", "role": "primary positive: braided corridor",
+        "center_lat": 47.30, "center_lon": 102.30, "half_km": 8,
+        "expected_feature": "wide braided off-road corridor with multiple parallel ruts",
+        "rationale": "Braided corridors are the strongest Sentinel-2-resolvable target and the project's distinctive contribution.",
+        "ref_imagery_date": "TBD", "provenance": "starting guess, central-Mongolia steppe", "verified": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {"type": "Point", "coordinates": [104.60, 46.20]},
+      "properties": {
+        "id": "dev-02-recovering", "stratum": "development", "role": "positive: likely recovering / disused corridor",
+        "center_lat": 46.20, "center_lon": 104.60, "half_km": 8,
+        "expected_feature": "track showing progressive vegetation recovery vs older imagery",
+        "rationale": "Tests the 'recovery' end of the signal; recovery must be persistent, not a wet-year artifact.",
+        "ref_imagery_date": "TBD", "provenance": "starting guess", "verified": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {"type": "Point", "coordinates": [100.10, 45.40]},
+      "properties": {
+        "id": "dev-03-gobi", "stratum": "development", "role": "positive: arid / low-vegetation corridor",
+        "center_lat": 45.40, "center_lon": 100.10, "half_km": 8,
+        "expected_feature": "corridor over sparse gobi where NDVI is weak and bare-soil carries the signal",
+        "rationale": "Checks that the composite survives where vegetation contrast is minimal.",
+        "ref_imagery_date": "TBD", "provenance": "starting guess", "verified": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {"type": "Point", "coordinates": [98.20, 48.10]},
+      "properties": {
+        "id": "holdout-01", "stratum": "holdout", "role": "untouched site-level holdout",
+        "center_lat": 48.10, "center_lon": 98.20, "half_km": 8,
+        "expected_feature": "mixed corridors; NOT inspected during development",
+        "rationale": "Reserved for the final held-out evaluation so generalization is not measured on tuning data.",
+        "ref_imagery_date": "TBD", "provenance": "starting guess", "verified": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {"type": "Point", "coordinates": [106.20, 48.60]},
+      "properties": {
+        "id": "confound-01", "stratum": "confound", "role": "environmental confound stratum",
+        "center_lat": 48.60, "center_lon": 106.20, "half_km": 8,
+        "expected_feature": "agriculture / riverbed / settlement expansion producing non-road land-use change",
+        "rationale": "Genuine land-cover change that must NOT be labelled as road disturbance; used to measure false positives by land type.",
+        "ref_imagery_date": "TBD", "provenance": "starting guess", "verified": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {"type": "Point", "coordinates": [99.50, 46.80]},
+      "properties": {
+        "id": "negative-01", "stratum": "negative_control", "role": "road-free negative control (falsification gate)",
+        "center_lat": 46.80, "center_lon": 99.50, "half_km": 8,
+        "expected_feature": "open terrain with no informal roads",
+        "rationale": "The Phase-1 gate: the composite disturbance signal must be quantitatively WEAKER here than at development sites, or the signal is not real.",
+        "ref_imagery_date": "TBD", "provenance": "starting guess", "verified": false
+      }
+    }
+  ]
+}
