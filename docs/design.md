@@ -1,9 +1,9 @@
 # Design — Desire Lines
 
-This document is the **research vision** for the project. The repository itself
-starts with a much smaller "fun" scope (see the README); this is the fuller
-concept that scope could grow toward. It is deliberately honest about where the
-hard problems and the unproven assumptions are.
+This document is the **technical design** for the project — the full methodology
+that the current early-stage tooling (see the README) is built toward. It is
+deliberately explicit about where the hard problems and the unproven assumptions
+are, so that results are never claimed beyond what the method supports.
 
 ## Refined problem definition
 
