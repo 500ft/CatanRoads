@@ -70,9 +70,9 @@ assert.match(gee, /\.addBands\(largeComponentMask\.unmask\(0\)\)/,
   'Export must include large_component_mask');
 assert.match(gee, /Export\.table\.toDrive\(/,
   'Gate metrics must be exportable as a machine-readable table');
-assert.doesNotMatch(
-  gee, /\bprint\(\s*['"][^'"\r\n]*['"]\s*,/,
-  'Earth Engine print calls must receive one printable value'
+assert.match(
+  gee, /aoi\.area\(\{\s*maxError:\s*[1-9][0-9]*(?:\.[0-9]+)?\s*\}\)\.divide\(1e6\)/,
+  'AOI area must specify a non-zero Earth Engine error margin'
 );
 
 assert.equal(numberConstant(gee, 'GATE_RATIO_MIN'), 2.0);

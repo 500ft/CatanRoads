@@ -401,7 +401,7 @@ print(ee.Dictionary({
   site_verified: SITE.verified,
   reference_imagery_date: SITE.refImageryDate,
   site_provenance: SITE.provenance,
-  aoi_km2: aoi.area().divide(1e6),
+  aoi_km2: aoi.area({maxError: 1}).divide(1e6),
   month: MONTH,
   early_years: earlyYears,
   recent_years: recentYears,
