@@ -14,6 +14,15 @@
     "provenance": "source of the coordinate / confirmation",
     "verified": "false until visually confirmed"
   },
+  "_phase1_gate": {
+    "preregistered_on": "2026-08-23",
+    "eligibility": "Only sites with verified=true and a dated reference-imagery provenance may enter the gate.",
+    "primary_metric": "large_component_fraction: fraction of non-permanent-water 10 m pixels that pass the candidate mask and belong to an 8-connected component of at least 50 pixels",
+    "candidate_definition": "disturbance_z >= 1.0; persistence >= 2/3; at least 2 valid recent years",
+    "pass_rule": "At least 2 of 3 development sites must have large_component_fraction >= max(2.0 * negative-01, 0.0001).",
+    "coverage_rule": "Every compared site must have coverage_fraction >= 0.90.",
+    "secondary_diagnostics": ["candidate_fraction", "disturbance_z p90", "disturbance_z p99"]
+  },
   "features": [
     {
       "type": "Feature",

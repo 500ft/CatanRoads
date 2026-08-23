@@ -155,8 +155,13 @@ the project produces plausible maps, not defensible results.
   observed topology separate from inferred topology.
 - **Data source** — use OSM or an authorized GIS layer as the seed graph, not a
   scraped commercial provider.
-- **Short archive** — three years (2024–2026) may be noise; use the longest
-  consistent archive available, ideally five or more.
+- **Short archive** — three years (2024–2026) may be noise. The Phase-1 primary
+  run uses four years per baseline (2018–2021 vs 2023–2026) and exposes the valid
+  recent-year count; use a longer consistent archive when the temporal buffer and
+  sensor record permit it.
+- **Sentinel-1 acquisition mismatch** — the early and recent periods have different
+  platform/revisit histories. Verify coverage and normalize sampling before treating
+  radar change as evidence; Sentinel-1 is deferred until after the Phase-1 gate.
 
 ## Design decisions (2026 review)
 
@@ -165,9 +170,9 @@ the project produces plausible maps, not defensible results.
    clusters, and network-scale disturbance; prioritize candidates for high-res
    inspection. This makes the *braided-corridor* idea the distinctive contribution.
 2. **Do not hard-mask cropland/built land.** That would erase real branches near
-   settlements, and WorldCover is a static 2021 product ill-suited to a 2019–2026
-   comparison. Hard-exclude only permanent water/snow; treat cropland/built as
-   evaluation strata and confounds, and detect land-cover *transitions* as confounds.
+   settlements, and WorldCover is a static 2021 product ill-suited to a multi-year
+   comparison. Hard-exclude only permanent water/snow; use temporal Dynamic World
+   probability changes to flag cropland/built/water transitions as confounds.
 3. **NDVI and bare-soil are related, not independent.** They share bands, so their
    agreement is one **composite disturbance score** (ΔNDVI, ΔBSI, local-control
    normalization, persistence; optional Sentinel-1 roughness later) — not two
@@ -196,9 +201,43 @@ the project produces plausible maps, not defensible results.
   disturbance must exceed the road-free control by a stated margin *before* any line
   extraction — the single most important gate (see below).
 - **Local-control normalization implemented in code**, so the README's "compared
-  against controls" is true, not aspirational (`gee/ndvi_change.js`, focal z-score).
+  against controls" is true, not aspirational (`gee/ndvi_change.js`, fixed-scale
+  200–800 m annular z-score).
 - **Provenance manifest on every artifact** (inputs, dates, scene counts, code
   version), emitted by the Earth Engine run and required for each exported raster.
+
+### Pre-registered Phase-1 gate (frozen 2026-08-23)
+
+The primary metric is **`large_component_fraction`**: the fraction of
+non-permanent-water pixels on a fixed 10 m grid that meet all of the following:
+
+1. annulus-normalized composite disturbance `z >= 1.0`;
+2. annual disturbance persistence `>= 2/3`;
+3. at least two valid recent-year observations; and
+4. membership in an 8-connected component of at least 50 pixels.
+
+Phase 1 passes only when all compared sites have `coverage_fraction >= 0.90`
+and at least two of the three verified development sites satisfy:
+
+```
+development large_component_fraction
+    >= max(2.0 * negative-01 large_component_fraction, 0.0001)
+```
+
+The absolute floor prevents a near-zero negative control from turning a trivial
+development response into an infinite ratio. `candidate_fraction` and the 90th
+and 99th disturbance-z percentiles are reported as diagnostics but do not enter
+the pass/fail decision. Site coordinates, reference-imagery date, provenance,
+and `verified=true` must be frozen in `config/sites.geojson` before a run is gate
+eligible. Unverified runs are explicitly labelled QA-only.
+
+The primary configuration is also frozen before gate inspection: July composites
+for 2018–2021 and 2023–2026 (2022 buffer), a 200–800 m control annulus, per-year
+effect-size floor `0.02`, and the thresholds above. After the primary decision,
+report sensitivity for z thresholds `{0.75, 1.0, 1.25}`, annual effect floors
+`{0.01, 0.02, 0.03}`, annuli `{100–600, 200–800, 300–1000} m`, and component
+sizes `{25, 50, 100}` pixels. Sensitivity runs cannot replace the registered
+primary result.
 
 ## Developed execution plan (Phase 0–4)
 
@@ -212,13 +251,15 @@ coordinates, rationale, reference-imagery date, and provenance. Change all publi
 wording from "active/abandoned" to "candidate disturbance/recovery".
 
 **Phase 1 — Temporal evidence cube.** Replace two-date comparison with annual,
-same-season composites (early 2019–2021, recent 2024–2026), retaining every annual
-composite. Compute disturbance magnitude, temporal trend, persistence, and
-local-control-normalized change; export float GeoTIFFs plus a machine-readable run
-manifest. **Deliverable:** one real Mongolia figure (RGB context, early/recent
-composites, feature channels, composite disturbance, negative controls).
-**Gate:** proceed only if coherent corridor-scale signal appears in ≥2 development
-AOIs *without* comparable response in the negative controls.
+same-season composites (early 2018–2021, recent 2023–2026, with 2022 held out as a
+temporal buffer), retaining every annual composite. Compute disturbance magnitude,
+annulus-normalized change, valid-year count, and persistence. Replace static
+WorldCover with temporal Dynamic World probability-change channels for confound
+interpretation. Export float GeoTIFFs containing the evidence channels,
+`candidate_mask`, `n_valid`, and `large_component_mask`, plus the run manifest.
+**Deliverable:** verified-site metrics and one real Mongolia figure with early and
+recent RGB as the first visual falsification check. **Gate:** use the exact rule in
+the pre-registration above; rendered layers never determine pass/fail.
 
 **Phase 2 — Raster→vector candidate extraction.** A proper Python package
 (`pyproject.toml`, `rasterio`, `geopandas`, `scikit-image`, `shapely`, `networkx`)
@@ -231,10 +272,14 @@ noise control); skeleton + graph tracing and shapely/rasterio I/O are the `full`
 optional extra. The extractor is applied to real imagery only after the Phase-1 gate.*
 
 **Phase 3 — Network conditioning and corridor grouping.** Load a versioned
-OSM/Geofabrik extract, buffer mapped roads by resolution + geolocation uncertainty,
-score proximity to endpoints/rural intersections, compare seeded vs unseeded
-detection, group parallel segments into corridors, and keep observed geometry
-separate from inferred connections.
+OSM/Geofabrik extract, rasterize large QA overlays with `ee.Image.paint`, and test
+mapped-road buffers beginning at 60, 80, and 100 m to cover rural digitizing offset
+and braided-corridor width. Score proximity to endpoints/rural intersections,
+compare seeded vs unseeded detection, group parallel segments into corridors, and
+keep observed geometry separate from inferred connections. During Phase 1, overlay
+the exported GeoTIFF on the dated Geofabrik extract in QGIS; do not ingest an Earth
+Engine road asset until interactive Phase-3 triage needs it. Google HYBRID tiles are
+visual QA only and must never become reference geometry or a tracing source.
 
 **Phase 4 — Evaluation.** Freeze the annotation protocol *before* threshold tuning.
 Report candidate precision/recall, corridor completeness, false positives by land
@@ -243,8 +288,8 @@ results, and candidate activity classification only if temporal labels are credi
 
 ### Go / no-go
 
-Cap Phase 0–1 at one weekend. **The gate:** can the Phase-1 disturbance signal
-survive the negative controls before any line extraction is attempted? If
+Cap Phase 0–1 at one weekend. **The gate:** apply the pre-registered 2×
+large-component-fraction rule before any line extraction is attempted. If
 Sentinel-2 cannot expose corridor-scale structure after temporal normalization, do
 **not** spend weeks tuning line detectors. Pivot to: (1) detect only braided/wide
 corridors; (2) use Sentinel-2 as a coarse candidate generator with high-resolution

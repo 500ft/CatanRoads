@@ -34,10 +34,10 @@ intent, not a fallback.
 
 | Stage | What it does |
 | --- | --- |
-| **Temporal evidence** | Build two multi-year, same-season baselines (e.g. 2019–2021 vs 2024–2026) rather than two single dates, suppressing year-to-year noise. |
+| **Temporal evidence** | Build two multi-year, same-season baselines (2018–2021 vs 2023–2026, with 2022 as a buffer) rather than two single dates, suppressing year-to-year noise. |
 | **Composite disturbance** | Fuse vegetation loss (ΔNDVI) and exposed-surface gain (ΔBSI) into one disturbance score — treated as *related* channels, not two independent measurements. |
-| **Local-control normalization** | Express disturbance as an anomaly against its own neighbourhood (focal mean/σ), so regional and seasonal drift cancel and only locally anomalous change survives. |
-| **Persistence** | Weight by the fraction of recent years the disturbance holds, separating durable change from single-year artifacts. |
+| **Local-control normalization** | Express disturbance against a 200–800 m control annulus that excludes the candidate corridor itself, on a fixed 10 m grid. |
+| **Persistence** | Weight by the fraction of valid recent years the disturbance holds and require at least two valid years, preventing one clear observation from scoring as fully persistent. |
 | **Network conditioning** | Score proximity to OpenStreetMap intersections/endpoints — as a *ranking signal*, keeping both all-area and network-seeded candidate sets for ablation. |
 | **Corridor grouping** | Merge parallel ruts into functional route corridors (the Mongolia-specific target). |
 
@@ -58,7 +58,10 @@ confound, and a road-free negative control) are declared in
   seeded-vs-unseeded detection is itself a planned result.
 - **Negative controls first.** The signal must be quantitatively weaker at a
   road-free control site than at development sites *before* any line extraction —
-  this is the project's falsification gate.
+  this is the project's falsification gate. The pre-registered primary rule is:
+  at least two of three verified development sites must have a large-component
+  candidate fraction at least `max(2 × negative-01, 0.0001)`, with at least 90%
+  analyzable coverage at every compared site.
 
 ## Tech stack
 
@@ -71,13 +74,14 @@ confound, and a road-free negative control) are declared in
 
 ## Status & roadmap
 
-Early development. **In place:** the reframed problem, the composite-disturbance
-Earth Engine pipeline (`gee/ndvi_change.js`), the site manifest, the figure
+Early development. **In place:** the reframed problem, the fixed-scale quantitative
+Phase-1 gate and Earth Engine pipeline (`gee/ndvi_change.js`), the site manifest, the figure
 workflow, and a **Phase-2 candidate extractor validated on synthetic corridors**
-([`analysis/`](analysis/), 5/5 tests). **Next (Phase 1 gate):** produce a real
-Mongolia disturbance figure and confirm it survives the negative control — only
-then is the extractor run on real data. **Then:** network conditioning and
-corridor-level evaluation. See [`docs/design.md`](docs/design.md).
+([`analysis/`](analysis/), 5/5 tests). **Next (Phase 0/1):** visually verify the
+registered sites with dated reference imagery, freeze their provenance, and run the
+pre-registered development-vs-negative-control statistic. Only a passing gate allows
+the extractor to run on real data. **Then:** network conditioning and corridor-level
+evaluation. See [`docs/design.md`](docs/design.md).
 
 ## Results
 
@@ -85,10 +89,11 @@ corridor-level evaluation. See [`docs/design.md`](docs/design.md).
 
 ![Candidate surface-disturbance map over an area of interest](results/ndvi_change.png)
 
-*Brown marks locally anomalous, persistent surface disturbance (a candidate
-corridor for high-resolution confirmation); teal marks greening/recovery. No
-active/abandoned claim is made without validation. Contains modified Copernicus
-Sentinel-2 data, processed in Google Earth Engine.*
+*Legacy placeholder from the earlier full-field divergent rendering. It is not a
+Phase-1 gate output. The current script displays only water-safe, persistent
+candidates that meet the registered mask and reports fixed-scale statistics instead
+of asking the map to carry the conclusion. Contains modified Copernicus Sentinel-2
+data, processed in Google Earth Engine.*
 
 > **Placeholder.** No real-imagery result is claimed yet: per the go/no-go gate, a
 > Mongolia result is only reported once the disturbance signal is shown to survive
@@ -107,20 +112,41 @@ negative-control gate (5/5 unit tests green). This validates the extractor; it i
 
 ## Reproduce the analysis
 
-1. Open the [Earth Engine Code Editor](https://code.earthengine.google.com/) and
-   paste [`gee/ndvi_change.js`](gee/ndvi_change.js).
-2. Set the AOI (right-click Google Maps → paste `lat, lon`), or use a site from
-   [`config/sites.geojson`](config/sites.geojson).
-3. Run. Read the **run manifest** printed to the console (scene counts per year),
-   then inspect the *candidate disturbance (local-normalized z)* layer for
-   persistent, linear/corridor-scale features. Export the float raster (for QGIS +
-   OSM overlay) or the thumbnail (for `tools/compose_figure.py`).
+1. Visually verify the three development sites and `negative-01` in dated
+   high-resolution imagery. Record the imagery date/provenance and set
+   `verified=true` in [`config/sites.geojson`](config/sites.geojson). Unverified
+   runs are QA-only and cannot enter the gate.
+2. Mirror those verification fields in the `SITES` block, select a registered
+   `SITE_ID`, and paste [`gee/ndvi_change.js`](gee/ndvi_change.js) into the
+   [Earth Engine Code Editor](https://code.earthengine.google.com/). Do not replace
+   the registered AOI with the former Ulaanbaatar default.
+3. Run the frozen primary configuration at all three development sites and
+   `negative-01`. Record `large_component_fraction` and `coverage_fraction` from
+   **GATE SITE METRICS**; do not read a gate result from the rendered map.
+4. Apply the exact rule printed under **REGISTERED GATE** and specified in
+   [`docs/design.md`](docs/design.md). Run sensitivity settings only after preserving
+   the primary result.
+5. Export the float raster, including `candidate_mask`, `n_valid`, and
+   `large_component_mask`, plus the one-row gate-metrics CSV. For Phase-1 road
+   context, overlay the raster in QGIS on a dated Geofabrik/OpenStreetMap extract;
+   Google HYBRID tiles are visual QA only.
+
+Check that the site mirror, shared z threshold, four-layer limit, water-safe mask,
+and required export bands have not drifted:
+
+```bash
+node tools/validate_phase1.mjs
+```
 
 ## Methodological rigor
 
 - **Same season, multi-year baselines** — or the signal measures grass, not roads.
 - **Local-control normalization is implemented in code**, not just asserted:
-  disturbance is an anomaly against each pixel's surroundings.
+  disturbance is compared with a fixed-scale annulus that excludes the corridor.
+- **Map and gate share a fixed grid** — thresholding, connected components,
+  regional statistics, and export all use the same declared 10 m analysis scale.
+- **Missing years cannot masquerade as persistence** — `n_valid >= 2` is part of
+  the candidate mask and both fields are exported for downstream analysis.
 - **Related indices, honestly named** — ΔNDVI and ΔBSI share bands, so their
   agreement is a *composite* score, not two independent confirmations.
 - **Resolution honesty as a result** — the project reports the minimum corridor

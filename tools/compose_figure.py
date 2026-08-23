@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Compose a publication-ready figure from a Google Earth Engine NDVI-change export.
+"""Compose a publication-ready figure from a Phase-1 candidate-mask rendering.
 
-Takes the rendered NDVI-change map you export from `gee/ndvi_change.js` (a PNG,
-JPG, or 3-band GeoTIFF) and bakes in a title, a diverging legend, an approximate
+Takes the thresholded candidate map exported by `gee/ndvi_change.js` (a PNG,
+JPG, or 3-band GeoTIFF) and bakes in a title, a sequential legend, an approximate
 scale bar, and the required Copernicus Sentinel-2 attribution — so the result is a
 self-contained figure that travels well (e.g. on LinkedIn) without relying on a
 caption.
@@ -10,8 +10,8 @@ caption.
 Usage:
     python tools/compose_figure.py \
         --input path/to/gee_export.png \
-        --title "Vegetation change around <place>" \
-        --years "2019 -> 2025" \
+        --title "Persistent candidate disturbance around <place>" \
+        --years "2018-2021 -> 2023-2026" \
         --region "<region>, Mongolia" \
         --scale 10 \
         --output results/ndvi_change.png
@@ -30,8 +30,8 @@ from PIL import Image
 
 INK = "#1b2a24"
 MUTED = "#5f6b64"
-# Diverging BrBG, matching gee/ndvi_change.js (brown = NDVI down, teal = NDVI up).
-PALETTE = ["#8c510a", "#d8b365", "#f6e8c3", "#ffffff", "#c7eae5", "#5ab4ac", "#01665e"]
+# Sequential candidate palette matching gee/ndvi_change.js.
+PALETTE = ["#f6e8c3", "#d8b365", "#8c510a"]
 
 
 def nice_length(meters: float) -> float:
@@ -50,13 +50,13 @@ def fmt_dist(meters: float) -> str:
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--input", required=True, help="GEE-exported NDVI-change image")
+    ap.add_argument("--input", required=True, help="GEE-rendered candidate-mask image")
     ap.add_argument("--output", default="results/ndvi_change.png")
-    ap.add_argument("--title", default="Vegetation change over time")
+    ap.add_argument("--title", default="Persistent candidate surface disturbance")
     ap.add_argument("--years", default="")
     ap.add_argument("--region", default="")
     ap.add_argument("--scale", type=float, default=10.0, help="metres per pixel")
-    ap.add_argument("--year-attr", default="", help="acquisition years for attribution, e.g. '2019, 2025'")
+    ap.add_argument("--year-attr", default="", help="acquisition years for attribution, e.g. '2018-2021, 2023-2026'")
     args = ap.parse_args()
 
     img = np.asarray(Image.open(args.input).convert("RGB"))
@@ -90,19 +90,19 @@ def main() -> None:
     ax.text(x0 + bar_px / 2, y0 - 6, fmt_dist(target), ha="center", va="bottom",
             fontsize=10, color=INK, zorder=5)
 
-    # --- diverging legend ---
-    cmap = LinearSegmentedColormap.from_list("brbg", PALETTE)
+    # --- candidate-strength legend ---
+    cmap = LinearSegmentedColormap.from_list("candidate_brown", PALETTE)
     cax = fig.add_axes([0.30, 0.055, 0.40, 0.022])
     grad = np.linspace(0, 1, 256).reshape(1, -1)
     cax.imshow(grad, aspect="auto", cmap=cmap)
     cax.set_xticks([]); cax.set_yticks([])
     for s in cax.spines.values():
         s.set_edgecolor("#cfd6d1")
-    cax.text(-0.02, 0.5, "candidate\ndisturbance", transform=cax.transAxes,
+    cax.text(-0.02, 0.5, "z = 1.0\nthreshold", transform=cax.transAxes,
              ha="right", va="center", fontsize=8.3, color=MUTED)
-    cax.text(1.02, 0.5, "greening /\nrecovery", transform=cax.transAxes,
+    cax.text(1.02, 0.5, "z ≥ 3.0\nstronger", transform=cax.transAxes,
              ha="left", va="center", fontsize=8.3, color=MUTED)
-    cax.set_title("candidate surface disturbance", fontsize=9, color=INK, pad=4)
+    cax.set_title("persistent candidate disturbance (masked)", fontsize=9, color=INK, pad=4)
 
     # --- attribution (required for Sentinel-2 redistribution) ---
     yrs = f" ({args.year_attr})" if args.year_attr else ""
