@@ -70,6 +70,10 @@ assert.match(gee, /\.addBands\(largeComponentMask\.unmask\(0\)\)/,
   'Export must include large_component_mask');
 assert.match(gee, /Export\.table\.toDrive\(/,
   'Gate metrics must be exportable as a machine-readable table');
+assert.doesNotMatch(
+  gee, /\bprint\(\s*['"][^'"\r\n]*['"]\s*,/,
+  'Earth Engine print calls must receive one printable value'
+);
 
 assert.equal(numberConstant(gee, 'GATE_RATIO_MIN'), 2.0);
 assert.equal(numberConstant(gee, 'GATE_ABSOLUTE_FLOOR'), 0.0001);

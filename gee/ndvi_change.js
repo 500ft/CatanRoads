@@ -56,7 +56,7 @@ if (!SITE.verified && !ALLOW_UNVERIFIED_QA) {
   throw new Error('Site is unverified in config/sites.geojson: ' + SITE_ID);
 }
 if (!SITE.verified) {
-  print('UNVERIFIED QA ONLY — do not report this as a Phase-1 gate result:', SITE_ID);
+  print('UNVERIFIED QA ONLY — do not report this as a Phase-1 gate result: ' + SITE_ID);
 }
 
 var aoi = ee.Geometry.Point([SITE.centerLon, SITE.centerLat])
@@ -320,7 +320,8 @@ var gateMetrics = ee.Dictionary({
   coverage_fraction: meanAt10m(analysisCoverage)
 }).combine(zPercentiles, true);
 
-print('REGISTERED GATE', ee.Dictionary({
+print(ee.Dictionary({
+  message_type: 'REGISTERED GATE',
   primary_metric: 'large_component_fraction',
   required_development_sites: GATE_MIN_DEVELOPMENT_SITES,
   development_to_negative_ratio_min: GATE_RATIO_MIN,
@@ -329,7 +330,7 @@ print('REGISTERED GATE', ee.Dictionary({
   decision_rule: 'Pass when >=2/3 verified development sites have metric >= ' +
     'max(2 * negative-01, 0.0001), with coverage >=0.90 at every compared site.'
 }));
-print('GATE SITE METRICS', gateMetrics);
+print(gateMetrics.set('message_type', 'GATE SITE METRICS'));
 
 // --- 10. Export + run manifest ------------------------------------------------
 var stack = zMasked
@@ -377,10 +378,12 @@ Export.table.toDrive({
   fileFormat: 'CSV'
 });
 
-print('Candidate thumbnail (click):',
-  zMasked.updateMask(candidateMask).visualize(candidateVis).getThumbURL({
+print(ee.Dictionary({
+  message_type: 'Candidate thumbnail (click)',
+  url: zMasked.updateMask(candidateMask).visualize(candidateVis).getThumbURL({
     dimensions: 1400, region: aoi, crs: ANALYSIS_CRS, format: 'png'
-  }));
+  })
+}));
 
 function countJuly(year) {
   var start = ee.Date.fromYMD(year, MONTH, 1);
@@ -391,7 +394,8 @@ function countJuly(year) {
     .size();
 }
 
-print('RUN MANIFEST', {
+print(ee.Dictionary({
+  message_type: 'RUN MANIFEST',
   site_id: SITE.id,
   site_stratum: SITE.stratum,
   site_verified: SITE.verified,
@@ -418,7 +422,7 @@ print('RUN MANIFEST', {
   min_valid_recent_years: MIN_VALID_RECENT_YEARS,
   min_component_pixels: MIN_COMPONENT_PIXELS,
   export_name: exportName
-});
+}));
 
 print('NEXT: run this frozen configuration at each VERIFIED development site and ' +
   'negative-01; compare the printed large_component_fraction values exactly as ' +
