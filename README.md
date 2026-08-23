@@ -121,8 +121,10 @@ negative-control gate (5/5 unit tests green). This validates the extractor; it i
    [Earth Engine Code Editor](https://code.earthengine.google.com/). Do not replace
    the registered AOI with the former Ulaanbaatar default.
 3. Run the frozen primary configuration at all three development sites and
-   `negative-01`. Record `large_component_fraction` and `coverage_fraction` from
-   **GATE SITE METRICS**; do not read a gate result from the rendered map.
+   `negative-01`. For each site, start the Tasks-tab `*_gate_metrics` table export
+   and record `large_component_fraction` and `coverage_fraction` from its CSV.
+   The batch CSV is authoritative because a full-resolution interactive print can
+   exceed the Code Editor timeout; never read a gate result from the rendered map.
 4. Apply the exact rule printed under **REGISTERED GATE** and specified in
    [`docs/design.md`](docs/design.md). Run sensitivity settings only after preserving
    the primary result.

@@ -71,6 +71,15 @@ assert.match(gee, /\.addBands\(largeComponentMask\.unmask\(0\)\)/,
 assert.match(gee, /Export\.table\.toDrive\(/,
   'Gate metrics must be exportable as a machine-readable table');
 assert.match(
+  gee,
+  /candidateForStats\s*\.addBands\(largeForStats\)\s*\.addBands\(analysisCoverage\)\s*\.reduceRegion\(\{/,
+  'Gate fractions must share one fixed-scale regional reduction'
+);
+assert.match(
+  gee, /var PRINT_GATE_METRICS = false;/,
+  'Interactive gate metrics must default off; the batch CSV is authoritative'
+);
+assert.match(
   gee, /aoi\.area\(\{\s*maxError:\s*[1-9][0-9]*(?:\.[0-9]+)?\s*\}\)\.divide\(1e6\)/,
   'AOI area must specify a non-zero Earth Engine error margin'
 );

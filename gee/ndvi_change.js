@@ -90,6 +90,10 @@ var GATE_RATIO_MIN = 2.0;
 var GATE_ABSOLUTE_FLOOR = 0.0001;
 var GATE_MIN_DEVELOPMENT_SITES = 2;
 var GATE_MIN_COVERAGE = 0.90;
+// Full-resolution gate metrics are authoritative in the table export. Leave the
+// interactive print off unless doing a quick diagnostic on a smaller workload;
+// the Code Editor stops synchronous computations after roughly five minutes.
+var PRINT_GATE_METRICS = false;
 
 function yearSpan(years) {
   return years[0] + '-' + years[years.length - 1];
@@ -289,15 +293,6 @@ Map.add(legend);
 // --- 9. Fixed-scale Phase-1 gate statistics ----------------------------------
 // Fractions use non-permanent-water area as the denominator. Invalid analysis
 // pixels count as zero candidates and are separately exposed by coverage_fraction.
-function meanAt10m(img) {
-  var band = ee.String(img.bandNames().get(0));
-  var values = img.reduceRegion({
-    reducer: ee.Reducer.mean(), geometry: aoi,
-    crs: ANALYSIS_CRS, scale: ANALYSIS_SCALE_M, maxPixels: 1e9
-  });
-  return values.get(band);
-}
-
 var candidateForStats = candidateMask.unmask(0).updateMask(landMask)
   .rename('candidate_fraction');
 var largeForStats = largeComponentMask.unmask(0).updateMask(landMask)
@@ -306,6 +301,13 @@ var analysisCoverage = validCount.gte(MIN_VALID_RECENT_YEARS)
   .and(zMasked.mask())
   .unmask(0).updateMask(landMask)
   .rename('coverage_fraction');
+var fractionMetrics = candidateForStats
+  .addBands(largeForStats)
+  .addBands(analysisCoverage)
+  .reduceRegion({
+    reducer: ee.Reducer.mean(), geometry: aoi,
+    crs: ANALYSIS_CRS, scale: ANALYSIS_SCALE_M, maxPixels: 1e9
+  });
 var zPercentiles = zMasked.reduceRegion({
   reducer: ee.Reducer.percentile([90, 99]), geometry: aoi,
   crs: ANALYSIS_CRS, scale: ANALYSIS_SCALE_M, maxPixels: 1e9
@@ -314,11 +316,11 @@ var zPercentiles = zMasked.reduceRegion({
 var gateMetrics = ee.Dictionary({
   site_id: SITE.id,
   stratum: SITE.stratum,
-  gate_eligible: SITE.verified,
-  candidate_fraction: meanAt10m(candidateForStats),
-  large_component_fraction: meanAt10m(largeForStats),
-  coverage_fraction: meanAt10m(analysisCoverage)
-}).combine(zPercentiles, true);
+  gate_eligible: SITE.verified
+}).combine(fractionMetrics, true).combine(zPercentiles, true);
+
+var exportPrefix = SITE.verified ? 'gate_' : 'qa_unverified_';
+var exportName = exportPrefix + SITE.id + '_' + yearSpan(recentYears);
 
 print(ee.Dictionary({
   message_type: 'REGISTERED GATE',
@@ -330,7 +332,15 @@ print(ee.Dictionary({
   decision_rule: 'Pass when >=2/3 verified development sites have metric >= ' +
     'max(2 * negative-01, 0.0001), with coverage >=0.90 at every compared site.'
 }));
-print(gateMetrics.set('message_type', 'GATE SITE METRICS'));
+if (PRINT_GATE_METRICS) {
+  print(gateMetrics.set('message_type', 'GATE SITE METRICS'));
+} else {
+  print(ee.Dictionary({
+    message_type: 'GATE METRICS DELIVERY',
+    action: 'Run the Tasks-tab table export: ' + exportName + '_gate_metrics',
+    reason: 'Batch export is authoritative; interactive full-resolution reductions can time out.'
+  }));
+}
 
 // --- 10. Export + run manifest ------------------------------------------------
 var stack = zMasked
@@ -346,8 +356,6 @@ var stack = zMasked
   .addBands(dwConfoundChange)
   .toFloat();
 
-var exportPrefix = SITE.verified ? 'gate_' : 'qa_unverified_';
-var exportName = exportPrefix + SITE.id + '_' + yearSpan(recentYears);
 Export.image.toDrive({
   image: stack,
   description: exportName,
@@ -425,5 +433,6 @@ print(ee.Dictionary({
 }));
 
 print('NEXT: run this frozen configuration at each VERIFIED development site and ' +
-  'negative-01; compare the printed large_component_fraction values exactly as ' +
+  'negative-01; run each *_gate_metrics table export and compare the CSV ' +
+  'large_component_fraction values exactly as ' +
   'specified by REGISTERED GATE. Do not infer the gate from the rendered map.');
