@@ -1,0 +1,51 @@
+{
+  "note": "Provenance for every committed image. evidence_type says what kind of claim the figure can support; a figure whose inputs are not in the repository is marked so explicitly rather than given a command that cannot run.",
+  "figures": [
+    {
+      "id": "method-demo-synthetic",
+      "evidence_type": "simulation",
+      "generator": "analysis/demo_synthetic.py",
+      "command": "python analysis/demo_synthetic.py",
+      "inputs": [
+        "analysis/catanroads/synthetic.py",
+        "analysis/catanroads/extract.py"
+      ],
+      "outputs": [
+        "results/method_demo_synthetic.png"
+      ],
+      "boundary": "Synthetic scene from make_scene(size=256, seed=1); demonstrates the extractor's behaviour, not performance on real imagery.",
+      "reproducibility": "Deterministic given the seed: two consecutive runs are byte-identical. NOT byte-stable across environments -- see environment_pinning below."
+    },
+    {
+      "id": "ndvi-change-placeholder",
+      "evidence_type": "placeholder",
+      "generator": "tools/compose_figure.py",
+      "command": null,
+      "inputs": [
+        "a manual Google Earth Engine raster export (not in this repository)"
+      ],
+      "outputs": [
+        "results/ndvi_change.png"
+      ],
+      "boundary": "Legacy full-field-rendering placeholder displayed by the top-level README. Not a claimed result.",
+      "status": "validation pending",
+      "blocking_dependency": "dated reference-imagery provenance frozen for all three development sites and negative-01 in config/sites.geojson, then the pre-registered Phase-1 gate run per results/README.md"
+    },
+    {
+      "id": "method-overview-diagram",
+      "evidence_type": "hand_authored",
+      "generator": null,
+      "command": null,
+      "inputs": [],
+      "outputs": [
+        "assets/method.png"
+      ],
+      "boundary": "Explanatory diagram referenced from README.md; no generator and no underlying measurement."
+    }
+  ],
+  "environment_pinning": {
+    "issue": "results/method_demo_synthetic.png as committed does not reproduce from the committed generator in a later environment: same canvas (1612x832), same dpi, and identical matplotlib (3.10.1 in the committed PNG's metadata and in the regenerating environment), but 1.59% of pixels differ across 491 connected components, 8 of them larger than 200 px -- solid-region change, not antialiasing. The generator is deterministic (numpy default_rng(seed=1)) and two consecutive runs are byte-identical, and no commit has touched analysis/ since the figure was committed, so the difference comes from a dependency version, not from the code or the seed.",
+    "not_identified": "Which dependency was NOT determined. matplotlib is ruled out by the PNG metadata. analysis/pyproject.toml pins only numpy>=1.24 and scipy>=1.10 with no upper bounds, so scipy.ndimage or numpy is the likely source, but this was not narrowed further and is not asserted.",
+    "recommendation": "Commit a small numeric artifact alongside the figure (candidate count and per-candidate geometry) so a future mismatch can be localised to a number rather than to pixels, and record the resolved dependency versions next to the figure."
+  }
+}
