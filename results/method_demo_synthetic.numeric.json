@@ -1,0 +1,96 @@
+{
+ "purpose": "Numeric fingerprint of the synthetic method demo, so a future mismatch lands on a number instead of on image pixels. Checked by analysis/tests/test_demo_reproducibility.py.",
+ "generator": "analysis/demo_synthetic.py",
+ "why_not_compare_png": "The PNG cannot be diffed across machines: font rasterisation differs between freetype builds, so the title and footer text bands differ by ~21,000 pixels while every data pixel is identical. See method_demo_synthetic.env.json.",
+ "scene": {
+  "call": "make_scene(size=256, seed=1)",
+  "shape": [
+   256,
+   256
+  ],
+  "dtype": "float64",
+  "sha256_float64": "05e47547dc4462db6e88ce4ef36c5e5bfb393bc7fa15f1b3a48ef852d73eabe2",
+  "min": -1.1882538591386265,
+  "max": 5.576552585833511,
+  "sum": 5689.689749019869
+ },
+ "candidates": {
+  "n": 6,
+  "endpoints_px": [
+   [
+    [
+     249.7734567621328,
+     58.366906531742714
+    ],
+    [
+     7.530649131076558,
+     119.7291307708688
+    ]
+   ],
+   [
+    [
+     255.21820210514045,
+     150.08548486866874
+    ],
+    [
+     1.7375625741599663,
+     176.60689961924444
+    ]
+   ],
+   [
+    [
+     255.14913764937307,
+     145.49279739157495
+    ],
+    [
+     1.482123307444411,
+     170.8353538938468
+    ]
+   ],
+   [
+    [
+     95.42110018415393,
+     182.694051738552
+    ],
+    [
+     79.57889981584607,
+     192.305948261448
+    ]
+   ],
+   [
+    [
+     167.29607899058226,
+     139.47739505657927
+    ],
+    [
+     151.53595449637913,
+     149.2517772739606
+    ]
+   ],
+   [
+    [
+     71.56073494142622,
+     196.91044042643856
+    ],
+    [
+     55.77415380017549,
+     206.6333035534494
+    ]
+   ]
+  ],
+  "length_px": [
+   249.89377825898293,
+   254.86431695591858,
+   254.92979295331307,
+   18.53008006665038,
+   18.54508214606345,
+   18.540501921897373
+  ]
+ },
+ "recorded_in": {
+  "python": "3.11.16",
+  "numpy": "2.1.3",
+  "scipy": "1.14.1"
+ },
+ "cross_version_check": "Scene sha256 and all six candidate endpoints are bit-identical under numpy 2.1.3 / scipy 1.14.1 and numpy 2.4.6 / scipy 1.17.1, and both environments render a byte-identical PNG."
+}

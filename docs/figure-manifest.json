@@ -14,7 +14,8 @@
         "results/method_demo_synthetic.png"
       ],
       "boundary": "Synthetic scene from make_scene(size=256, seed=1); demonstrates the extractor's behaviour, not performance on real imagery.",
-      "reproducibility": "Deterministic given the seed: two consecutive runs are byte-identical. NOT byte-stable across environments -- see environment_pinning below."
+      "reproducibility": "Deterministic given the seed. Numeric output (scene fingerprint and candidate geometry) is pinned in results/method_demo_synthetic.numeric.json and gated by analysis/tests/test_demo_reproducibility.py. Do NOT gate on PNG bytes: font rasterisation differs between freetype builds, so the text bands change while every data pixel is identical -- see results/method_demo_synthetic.env.json.",
+      "numeric_record": "results/method_demo_synthetic.numeric.json"
     },
     {
       "id": "ndvi-change-placeholder",
@@ -43,9 +44,9 @@
       "boundary": "Explanatory diagram referenced from README.md; no generator and no underlying measurement."
     }
   ],
-  "environment_pinning": {
-    "issue": "results/method_demo_synthetic.png as committed does not reproduce from the committed generator in a later environment: same canvas (1612x832), same dpi, and identical matplotlib (3.10.1 in the committed PNG's metadata and in the regenerating environment), but 1.59% of pixels differ across 491 connected components, 8 of them larger than 200 px -- solid-region change, not antialiasing. The generator is deterministic (numpy default_rng(seed=1)) and two consecutive runs are byte-identical, and no commit has touched analysis/ since the figure was committed, so the difference comes from a dependency version, not from the code or the seed.",
-    "not_identified": "Which dependency was NOT determined. matplotlib is ruled out by the PNG metadata. analysis/pyproject.toml pins only numpy>=1.24 and scipy>=1.10 with no upper bounds, so scipy.ndimage or numpy is the likely source, but this was not narrowed further and is not asserted.",
-    "recommendation": "Commit a small numeric artifact alongside the figure (candidate count and per-candidate geometry) so a future mismatch can be localised to a number rather than to pixels, and record the resolved dependency versions next to the figure."
+  "figure_comparison_policy": {
+    "gate_on": "numeric output, not image bytes",
+    "reason": "For method-demo-synthetic, a committed-vs-fresh PNG diff shows 1.59% of pixels differing, all of it glyph rasterisation in the title and footer bands; every pixel inside both axes is identical. Comparing bytes would report drift that does not exist, and a real change in the scene or the extracted geometry would be lost in that noise.",
+    "verified_stable_across": "numpy 2.1.3 / scipy 1.14.1 and numpy 2.4.6 / scipy 1.17.1 -- same scene sha256, same six candidate endpoints, byte-identical PNG"
   }
 }
