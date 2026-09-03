@@ -6,7 +6,13 @@ readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "MIT" }
 # Core baseline runs on numpy + scipy only (no heavy geospatial stack required).
-dependencies = ["numpy>=1.24", "scipy>=1.10"]
+# Upper bounds so a major release cannot change extraction results silently.
+# analysis/tests/test_demo_reproducibility.py is what would CATCH such a change;
+# these bounds are what make the catch actionable rather than a mystery. Verified:
+# the numeric gate passes at both ends of this range (numpy 2.1.3 / scipy 1.14.1 and
+# numpy 2.4.6 / scipy 1.17.1), which also disproved an earlier theory that an
+# unpinned dependency was behind the synthetic-demo figure mismatch.
+dependencies = ["numpy>=1.24,<3", "scipy>=1.10,<2"]
 
 [project.optional-dependencies]
 # The fuller pipeline (skeleton + graph tracing, richer geometry, raster/vector I/O).
