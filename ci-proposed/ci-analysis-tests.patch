@@ -1,0 +1,31 @@
+diff --git a/.github/workflows/ci.yml b/.github/workflows/ci.yml
+new file mode 100644
+index 0000000..6c45e41
+--- /dev/null
++++ b/.github/workflows/ci.yml
+@@ -0,0 +1,25 @@
++name: CI
++
++on:
++  push:
++    branches: [main]
++  pull_request:
++    branches: [main]
++
++jobs:
++  analysis-tests:
++    runs-on: ubuntu-latest
++    steps:
++      - uses: actions/checkout@v5
++      - uses: actions/setup-python@v6
++        with:
++          python-version: "3.11"
++          cache: pip
++      - name: Install
++        run: python -m pip install -e "analysis[dev]"
++      - name: Run analysis tests
++        working-directory: analysis
++        env:
++          PYTHONPATH: .
++          MPLBACKEND: Agg
++        run: python -m pytest -q
