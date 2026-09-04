@@ -9,7 +9,7 @@ multi-year satellite imagery.**
 ![Platform: Google Earth Engine](https://img.shields.io/badge/platform-Google%20Earth%20Engine-2d6a4f)
 ![Imagery: Sentinel-2](https://img.shields.io/badge/imagery-Sentinel--2-2d6a4f)
 
-![Method overview](assets/method.png)
+![Method pipeline: two multi-year Sentinel-2 baselines are fused into a disturbance score, normalized against a local control annulus, weighted by persistence, conditioned on the OSM network, and grouped into candidate corridors](assets/method.png)
 
 ## Overview
 
@@ -72,22 +72,11 @@ confound, and a road-free negative control) are declared in
 - **Raster→vector (planned):** Python — `rasterio`, `scikit-image`, `shapely`,
   `geopandas`, `networkx`
 
-## Status & roadmap
-
-Early development. **In place:** the reframed problem, the fixed-scale quantitative
-Phase-1 gate and Earth Engine pipeline (`gee/ndvi_change.js`), the site manifest, the figure
-workflow, and a **Phase-2 candidate extractor validated on synthetic corridors**
-([`analysis/`](analysis/), 5/5 tests). **Next (Phase 0/1):** visually verify the
-registered sites with dated reference imagery, freeze their provenance, and run the
-pre-registered development-vs-negative-control statistic. Only a passing gate allows
-the extractor to run on real data. **Then:** network conditioning and corridor-level
-evaluation. See [`docs/design.md`](docs/design.md).
-
 ## Results
 
 ### Real-world results — pending the Phase-1 gate
 
-![Candidate surface-disturbance map over an area of interest](results/ndvi_change.png)
+![Legacy placeholder rendering of a surface-disturbance map — not a Phase-1 gate output](results/ndvi_change.png)
 
 *Legacy placeholder from the earlier full-field divergent rendering. It is not a
 Phase-1 gate output. The current script displays only water-safe, persistent
@@ -102,12 +91,13 @@ data, processed in Google Earth Engine.*
 
 ### Method demonstration (synthetic)
 
-![Synthetic method demonstration](results/method_demo_synthetic.png)
+![Synthetic scene: the extractor traces curved, braided, and broken corridors while rejecting a round blob and background noise](results/method_demo_synthetic.png)
 
 *Known-truth synthetic scene. The Phase-2 ridge + connected-component extractor
 ([`analysis/`](analysis/)) localizes curved, braided, and broken corridors and
 **rejects the round blob and background noise** — the tooling analogue of the
-negative-control gate (5/5 unit tests green). This validates the extractor; it is
+negative-control gate (5/5 extractor unit tests green, plus 4 tests pinning this
+figure's numeric output). This validates the extractor; it is
 **not** a Mongolia result. Reproduce: `python analysis/demo_synthetic.py`.*
 
 ## Reproduce the analysis
@@ -139,6 +129,18 @@ and required export bands have not drifted:
 ```bash
 node tools/validate_phase1.mjs
 ```
+
+## Status & roadmap
+
+Early development. **In place:** the reframed problem, the fixed-scale quantitative
+Phase-1 gate and Earth Engine pipeline (`gee/ndvi_change.js`), the site manifest, the figure
+workflow, and a **Phase-2 candidate extractor validated on synthetic corridors**
+([`analysis/`](analysis/), 9/9 tests: 5 extractor unit tests plus 4 pinning the
+demo figure's numeric output). **Next (Phase 0/1):** visually verify the
+registered sites with dated reference imagery, freeze their provenance, and run the
+pre-registered development-vs-negative-control statistic. Only a passing gate allows
+the extractor to run on real data. **Then:** network conditioning and corridor-level
+evaluation. See [`docs/design.md`](docs/design.md).
 
 ## Methodological rigor
 
