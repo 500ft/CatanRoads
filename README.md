@@ -32,6 +32,24 @@ intent, not a fallback.
 
 ## Approach
 
+```mermaid
+flowchart LR
+    classDef input    fill:#bbdefb,stroke:#1565c0,stroke-width:2px,color:#1f2933,font-weight:bold;
+    classDef process  fill:#b2dfdb,stroke:#00796b,stroke-width:2px,color:#1f2933;
+    classDef core     fill:#e1bee7,stroke:#7b1fa2,stroke-width:2px,color:#1f2933,font-weight:bold;
+    classDef result   fill:#ffe0b2,stroke:#ef6c00,stroke-width:2px,color:#1f2933;
+    classDef endpoint fill:#f8bbd0,stroke:#c2185b,stroke-width:2px,color:#1f2933,font-weight:bold;
+
+    A[/Two multi-year same-season Sentinel-2 baselines/]:::input --> B[ΔNDVI + ΔBSI composite disturbance]:::process
+    B --> C[Local-control normalization]:::process
+    C --> D[Persistence weighting]:::process
+    D --> E{{Network-conditioned corridor extraction}}:::core
+    E --> F(Ranked candidate corridors):::result
+    F --> G([High-resolution confirmation queue]):::endpoint
+```
+
+*Shapes: parallelogram = input · rectangle = process · hexagon = core method · rounded = result · pill = endpoint.*
+
 | Stage | What it does |
 | --- | --- |
 | **Temporal evidence** | Build two multi-year, same-season baselines (2018–2021 vs 2023–2026, with 2022 as a buffer) rather than two single dates, suppressing year-to-year noise. |
