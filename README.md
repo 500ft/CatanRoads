@@ -1,8 +1,8 @@
 # Catan Roads
 
-**A network-conditioned method for finding persistent surface-disturbance
-corridors that may represent unmapped informal roads in Mongolia — from
-multi-year satellite imagery.**
+**A research prototype for screening positive surface disturbance and extracting
+synthetic candidate corridors. Network conditioning and real-road validation in
+Mongolia are planned, not demonstrated.**
 
 ![License: MIT](https://img.shields.io/badge/license-MIT-2d6a4f)
 ![Status: early development](https://img.shields.io/badge/status-early%20development-2d6a4f)
@@ -49,6 +49,9 @@ flowchart LR
 ```
 
 *Shapes: parallelogram = input · rectangle = process · hexagon = core method · rounded = result · pill = endpoint.*
+
+The diagram describes the intended full pipeline. Network conditioning, route
+grouping and the confirmation queue are not an implemented end-to-end detector.
 
 | Stage | What it does |
 | --- | --- |
@@ -133,9 +136,10 @@ figure's numeric output). This validates the extractor; it is
    and record `large_component_fraction` and `coverage_fraction` from its CSV.
    The batch CSV is authoritative because a full-resolution interactive print can
    exceed the Code Editor timeout; never read a gate result from the rendered map.
-4. Apply the exact rule printed under **REGISTERED GATE** and specified in
-   [`docs/design.md`](docs/design.md). Run sensitivity settings only after preserving
-   the primary result.
+4. Use the [Phase-1 intake runbook](docs/PHASE1_RUNBOOK.md) to check the four CSVs
+   with `python -m catanroads.phase1_gate`. It rejects unverified references,
+   incomplete rows, non-finite fractions and mismatched primary settings.
+   Run sensitivity settings only after preserving the primary result.
 5. Export the float raster, including `candidate_mask`, `n_valid`, and
    `large_component_mask`, plus the one-row gate-metrics CSV. For Phase-1 road
    context, overlay the raster in QGIS on a dated Geofabrik/OpenStreetMap extract;
@@ -149,6 +153,10 @@ node tools/validate_phase1.mjs
 ```
 
 ## Status & roadmap
+
+Local CI workflow and intake tests are implemented in this sprint worktree;
+hosted Actions has not run. All six reference sites remain unverified. See the
+[six-day roadmap](docs/SPRINT_ROADMAP.md) and [task ledger](docs/SPRINT_TASKS.csv).
 
 Early development. **In place:** the reframed problem, the fixed-scale quantitative
 Phase-1 gate and Earth Engine pipeline (`gee/ndvi_change.js`), the site manifest, the figure
@@ -173,7 +181,12 @@ evaluation. See [`docs/design.md`](docs/design.md).
   agreement is a *composite* score, not two independent confirmations.
 - **Resolution honesty as a result** — the project reports the minimum corridor
   width/braiding Sentinel-2 can resolve, a defensible finding regardless of outcome.
-- The output is *candidate disturbance/recovery evidence* — **not** traffic
+- The Phase-1 mask selects **positive disturbance only**. Recovery generally
+  has the opposite sign, and stable bare tracks need not change at all.
+  `dev-02-recovering` therefore does not validate recovery detection through
+  this gate. Retain its registered role and report the mismatch; any sign-aware
+  recovery experiment needs a prospective amendment, not a post-hoc site swap.
+- The output is *candidate positive-disturbance evidence* — **not** traffic
   volume, vehicle counts, or a validated active/abandoned label.
 
 ## License

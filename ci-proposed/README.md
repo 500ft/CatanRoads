@@ -1,7 +1,10 @@
-# Proposed CI change — not active
+# Historical CI transport patch — superseded locally, 2026-09-06
 
-`ci-proposed/ci-analysis-tests.patch` contains a workflow change that **is not installed**. Nothing in this
-directory is executed by GitHub Actions; it only takes effect once someone applies it.
+A reviewed workflow now exists at [ci.yml](../.github/workflows/ci.yml) in this
+local sprint worktree, including analysis tests and static GEE validation.
+It has not been pushed or run on GitHub. The old patch below records the previous
+permission gap; **do not apply it again**. Hosted execution still needs an
+authorized push with workflow permissions. No new credential check is claimed.
 
 ## Why it is a patch rather than the workflow file
 
@@ -19,7 +22,7 @@ That restriction is deliberate: it stops an automated token from silently changi
 runs. Shipping the change as a patch keeps that property — the diff is reviewable, and it
 does nothing until a human or an authorised token installs it.
 
-## Apply it
+## Historical application instructions (superseded; do not execute)
 
 ```bash
 git apply ci-proposed/ci-analysis-tests.patch
