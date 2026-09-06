@@ -1,0 +1,20 @@
+{
+  "recorded_on_local": "2026-09-06",
+  "base_commit": "690c2fcf88bbe689bd006cce91863821a39edb2a",
+  "branch": "sprint/evidence-integrity-20260905",
+  "status": "uncommitted selected-source candidate; not public preregistration",
+  "scope": "Selected implementation/protocol bytes frozen before developer counterexample outputs; hashes do not establish independent evidence",
+  "files": {
+    "analysis/catanroads/phase1_gate.py": "2f5e883e204f09042d1db4d88aacd3e38f639b91cb28a5679c76a56e38947250",
+    "analysis/tests/test_phase1_gate.py": "f670aa5879ec34496af1c490ba4a1467b86e881496f053a5dbad31090821a373",
+    "analysis/pyproject.toml": "97fff512af182fd8706d2c4e39a349ee79ea7a1c64ff8b8064929f1b009dc2f1",
+    "gee/ndvi_change.js": "cc0277fbcd1c3edfe83ccae6c5db921103b8b66db6f6dd3ec5d1eb876b44d708",
+    "config/sites.geojson": "137f00927a8d46bcb55bb95f75a33ebf71c704905a24b2777577d52355cc88c1",
+    ".github/workflows/ci.yml": "87a524ed6f8b04d2f682e2c736b29bdb67e53ea11f95d6d8c1b264b5fa1a9530",
+    "README.md": "bd44b09ec0793efe5a074cca8d10614c12782873019b4663187a343fb0a22708",
+    "docs/design.md": "8d3cb6208de9d18365e123a2efb6394523b24c9b15ad3bef8d91a578102a1a0f",
+    "docs/PHASE1_RUNBOOK.md": "f444982f6b6d39acb13627de347ad1cca164bafdfc1d867e002809ca31fae16c",
+    "evidence/sprint-2026-09-05/evaluation-plan.md": "c17be8480a0fcc2d6c5fb91bc3c61422e73f01e690173ba62f0c3b7d092307cf",
+    "evidence/sprint-2026-09-05/evaluate_candidate.py": "e94740121ad62e69220d5bfbd0421b55a294f5c0d1e4c3e9c37ee9a08febc6ec"
+  }
+}
