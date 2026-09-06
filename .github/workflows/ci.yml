@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  analysis-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: analysis/pyproject.toml
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install analysis dependencies
+        run: python -m pip install -e "analysis[dev]"
+      - name: Python syntax
+        run: python -m compileall -q analysis/catanroads analysis/tests
+      - name: Run analysis tests
+        env:
+          PYTHONPATH: analysis
+          MPLBACKEND: Agg
+        run: python -m pytest analysis/tests -q
+      - name: Validate Earth Engine configuration statically
+        run: node tools/validate_phase1.mjs

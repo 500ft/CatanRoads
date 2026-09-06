@@ -1,0 +1,42 @@
+{
+  "recorded_on_local": "2026-09-06",
+  "kind": "local software checks, not GEE execution",
+  "results": [
+    {
+      "command": "python -m compileall -q analysis/catanroads analysis/tests",
+      "working_directory": "/Users/redhose/Developer/research-sprints/2026-09-05/CatanRoads",
+      "chunk_id": "f4078b",
+      "wall_time_seconds": 0.000004875,
+      "exit_code": 0,
+      "original_token_count": 0,
+      "output": ""
+    },
+    {
+      "command": "PYTHONPATH=analysis python -c 'import sys, types; sys.modules[\"readline\"] = types.ModuleType(\"readline\"); import pytest; raise SystemExit(pytest.main([\"analysis/tests\", \"-q\"]))'",
+      "working_directory": "/Users/redhose/Developer/research-sprints/2026-09-05/CatanRoads",
+      "chunk_id": "51a589",
+      "wall_time_seconds": 0.537257458,
+      "exit_code": 0,
+      "original_token_count": 25,
+      "output": "................................                                         [100%]\n32 passed in 0.36s\n"
+    },
+    {
+      "command": "node tools/validate_phase1.mjs",
+      "working_directory": "/Users/redhose/Developer/research-sprints/2026-09-05/CatanRoads",
+      "chunk_id": "41ee2e",
+      "wall_time_seconds": 0.000003625,
+      "exit_code": 0,
+      "original_token_count": 18,
+      "output": "Phase-1 static validation passed (6 sites; Z_MIN=1.0; four QA layers).\n"
+    },
+    {
+      "command": "git diff --check",
+      "working_directory": "/Users/redhose/Developer/research-sprints/2026-09-05/CatanRoads",
+      "chunk_id": "024456",
+      "wall_time_seconds": 0.000003083,
+      "exit_code": 0,
+      "original_token_count": 0,
+      "output": ""
+    }
+  ]
+}

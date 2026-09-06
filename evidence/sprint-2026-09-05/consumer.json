@@ -1,0 +1,23 @@
+{
+  "date": "2026-09-06",
+  "command": "python -m pip install -e ./analysis --no-deps --no-build-isolation",
+  "working_directory": "/Users/redhose/Developer/research-sprints/2026-09-05/CatanRoads",
+  "exit_status": 0,
+  "observed_artifact": "catanroads-0.1.0-0.editable-py3-none-any.whl",
+  "editable_wheel_sha256_at_install": "9db58bbbb3258d704e68921af0f69a1ab19c6557009730dff7b55e798d4c3a85",
+  "source_identity": "candidate.json selected-source hashes identify evaluated editable source after reviewer fixes",
+  "limitations": "Existing Python3.11 environment, not a fresh dependency installation; no registry upload or GEE execution.",
+  "consumer_checks": [
+    {
+      "command": "python -m catanroads.phase1_gate --help",
+      "working_directory": "/private/tmp",
+      "exit_status": 0
+    },
+    {
+      "command": "python evidence/sprint-2026-09-05/evaluate_candidate.py",
+      "working_directory": "/Users/redhose/Developer/research-sprints/2026-09-05/CatanRoads",
+      "exit_status": 0,
+      "evidence": "evaluation.json; each CLI runs from a temporary consumer directory"
+    }
+  ]
+}
