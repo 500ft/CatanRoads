@@ -1,0 +1,37 @@
+{
+  "recorded_on": "2026-09-05",
+  "stage": "baseline",
+  "repo": "CatanRoads",
+  "canonical_checkout": "/Users/redhose/Developer/research-sprints/2026-09-05/CatanRoads",
+  "original_checkout": "/Users/redhose/.graphify/repos/500ft/CatanRoads",
+  "identity": {
+    "command": "git rev-parse HEAD; git branch --show-current; git status --short; python --version; node --version",
+    "chunk_id": "3e5e01",
+    "wall_time_seconds": 0.0000065,
+    "exit_code": 0,
+    "original_token_count": 25,
+    "output": "690c2fcf88bbe689bd006cce91863821a39edb2a\nsprint/evidence-integrity-20260905\nPython 3.11.8\nv22.21.0\n"
+  },
+  "checks": [
+    {
+      "repo": "CatanRoads",
+      "cwd": "/Users/redhose/Developer/research-sprints/2026-09-05/CatanRoads",
+      "command": "PYTHONPATH=analysis python -c 'import sys, types; sys.modules[\"readline\"] = types.ModuleType(\"readline\"); import pytest; raise SystemExit(pytest.main([\"-q\"]))'",
+      "chunk_id": "836f21",
+      "wall_time_seconds": 0.4818455,
+      "exit_code": 0,
+      "original_token_count": 25,
+      "output": ".........                                                                [100%]\n9 passed in 0.33s\n"
+    },
+    {
+      "repo": "CatanRoads",
+      "cwd": "/Users/redhose/Developer/research-sprints/2026-09-05/CatanRoads",
+      "command": "node tools/validate_phase1.mjs",
+      "chunk_id": "a7ece6",
+      "wall_time_seconds": 0.019944209,
+      "exit_code": 0,
+      "original_token_count": 18,
+      "output": "Phase-1 static validation passed (6 sites; Z_MIN=1.0; four QA layers).\n"
+    }
+  ]
+}

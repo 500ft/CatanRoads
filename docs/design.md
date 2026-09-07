@@ -1,5 +1,20 @@
 # Design — Catan Roads
 
+## Current implementation boundary — 2026-09-06
+
+The Phase-1 GEE mask selects positive disturbance, not signed recovery. A
+recovering track generally has the opposite sign and an unchanged track may be
+invisible. The registered dev-02-recovering role therefore does not establish
+recovery detection via a positive gate. Do not swap sites, reverse its sign or
+retune thresholds after predictions; any recovery endpoint needs a separately
+recorded prospective amendment.
+
+The new [intake runbook](PHASE1_RUNBOOK.md) requires verified references and
+matching CSV settings before the fixed two-of-three screen can pass. All current
+sites remain unverified. Passing large-component fractions would justify the
+next investigation, not road classification or network-conditioned performance.
+The remainder describes intended research, not accomplished end-to-end behavior.
+
 This document is the **technical design** for the project — the full methodology
 that the current early-stage tooling (see the README) is built toward. It is
 deliberately explicit about where the hard problems and the unproven assumptions

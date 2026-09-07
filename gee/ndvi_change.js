@@ -366,6 +366,12 @@ Export.image.toDrive({
 });
 
 var gateRecord = ee.Feature(null, gateMetrics).set({
+  // Intake provenance; these do not change any mask or registered threshold.
+  center_lat: SITE.centerLat,
+  center_lon: SITE.centerLon,
+  half_km: SITE.halfKm,
+  month: MONTH,
+  min_control_pixels: MIN_CONTROL_PIXELS,
   reference_imagery_date: SITE.refImageryDate,
   site_provenance: SITE.provenance,
   early_years: yearSpan(earlyYears),
