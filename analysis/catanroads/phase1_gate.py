@@ -12,6 +12,8 @@ from pathlib import Path
 DEVELOPMENT = ("dev-01-braided", "dev-02-recovering", "dev-03-gobi")
 NEGATIVE = "negative-01"
 REQUIRED = set(DEVELOPMENT) | {NEGATIVE}
+EARLY_YEARS = (2018, 2019, 2020, 2021)
+RECENT_YEARS = (2023, 2024, 2025, 2026)
 CONFIG = dict(early_years="2018-2021", recent_years="2023-2026",
     analysis_crs="EPSG:3857", analysis_scale_m=10, control_inner_m=200,
     control_outer_m=800, min_control_pixels=500, month=7, z_min=1.0,
@@ -40,6 +42,7 @@ def evaluate_gate(manifest, rows, *, evidence_kind="synthetic"):
     """
     errors = []
     values = {}
+    temporal_qa = {}
     try:
         if evidence_kind not in ("synthetic", "earth-engine-export"):
             raise ValueError("unknown evidence kind")
@@ -90,6 +93,20 @@ def evaluate_gate(manifest, rows, *, evidence_kind="synthetic"):
                     _number(actual), expected, rel_tol=1e-12, abs_tol=1e-12)
                 if not match:
                     raise ValueError(key + ": frozen setting mismatch: " + field)
+            counts = {}
+            for year in EARLY_YEARS + RECENT_YEARS:
+                count = _number(row[f"s2_scene_count_{year}"])
+                if count < 0 or not count.is_integer():
+                    raise ValueError(key + ": scene counts must be nonnegative integers")
+                counts[year] = int(count)
+            temporal_qa[key] = dict(
+                scene_counts={str(year): count for year, count in counts.items()},
+                missing_scene_years=[year for year, count in counts.items() if count == 0],
+            )
+            if not any(counts[year] for year in EARLY_YEARS):
+                raise ValueError(key + ": no early scenes support the baseline")
+            if sum(counts[year] > 0 for year in RECENT_YEARS) < CONFIG["min_valid_recent_years"]:
+                raise ValueError(key + ": scene availability cannot support two valid recent years")
             value = _number(row["large_component_fraction"])
             coverage = _number(row["coverage_fraction"])
             if not 0 <= value <= 1 or not 0.90 <= coverage <= 1:
@@ -102,13 +119,15 @@ def evaluate_gate(manifest, rows, *, evidence_kind="synthetic"):
     except (KeyError, TypeError, ValueError, AttributeError, OverflowError) as exc:
         errors.append(str(exc))
     if errors:
-        return dict(status="INCONCLUSIVE", errors=errors, scope="Metadata intake only; no road verdict")
+        return dict(status="INCONCLUSIVE", errors=errors, temporal_qa=temporal_qa,
+                    scope="Metadata intake only; no road verdict")
     threshold = max(2.0 * values[NEGATIVE], 0.0001)
     passing = [key for key in DEVELOPMENT if values[key] >= threshold]
     arithmetic = "SCREEN_PASS" if len(passing) >= 2 else "SCREEN_FAIL"
     return dict(status="DEVELOPMENT_ONLY" if evidence_kind == "synthetic" else arithmetic,
         arithmetic_result=arithmetic, threshold=threshold, passing_development_sites=passing,
         denominator=3, errors=[], evidence_kind=evidence_kind,
+        temporal_qa=temporal_qa,
         scope="Large-component positive-disturbance screen only; not road precision, recovery detection or source authentication")
 
 

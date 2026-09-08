@@ -25,6 +25,10 @@ def fixture():
             control_outer_m=800, min_control_pixels=500, month=7, z_min=1.0,
             yearly_effect_min=0.02, persistence_min=2/3, min_valid_recent_years=2,
             min_component_pixels=50))
+    # Synthetic scene counts, not acquired satellite metadata.
+    for row in rows:
+        row.update({f"s2_scene_count_{year}": 3 for year in
+                    (2018, 2019, 2020, 2021, 2023, 2024, 2025, 2026)})
     return manifest, rows
 
 

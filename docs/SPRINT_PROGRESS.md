@@ -1,5 +1,17 @@
 # Sprint progress — CatanRoads
 
+## 2026-09-08 — CR-D01 temporal QA follow-up
+
+Completed one bounded P1 software task after the original 30h sprint; its original
+rows and evidence are preserved. Base `b4cee1fcb2d6e0cc62b4c48699fa692e7b774ef9`,
+branch `task/priority-one-20260908`, isolated worktree under
+`/Users/redhose/Developer/daily-prs/2026-09-08/CatanRoads`.
+[Review and reproduction](../evidence/task-2026-09-08/README.md): 48 Python tests,
+Node branch/schema and static checks pass. Empty annual collections retain
+masked bands; exported scene QA is required at intake. Candidate commit/push
+identity is recorded in the PR. CR-08 remains owner-blocked; no imagery run.
+Next command: `node tools/test_temporal_qa.mjs`; next external task CR-08.
+
 ## 2026-09-06 — Partial handoff
 
 - Sprint start2026-09-05; canonical checkout `/Users/redhose/Developer/research-sprints/2026-09-05/CatanRoads`.
