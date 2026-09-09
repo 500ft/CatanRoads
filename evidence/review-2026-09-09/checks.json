@@ -1,0 +1,53 @@
+{
+  "base": "8eb9356617fdefe9ffc81e172086a1939a17f073",
+  "classification": "developer regression evidence, synthetic inputs only",
+  "red": {
+    "chunk_id": "ba5e67",
+    "wall_time_seconds": 0.54000925,
+    "exit_code": 1,
+    "original_token_count": 1770,
+    "output": "FFF                                                                      [100%]\n=================================== FAILURES ===================================\n_______ test_runbook_substitution_preserves_literal_paths[export files] ________\n\ntmp_path = PosixPath('/private/var/folders/rm/1f4h8c954_58tny8x94fr7k40000gn/T/pytest-of-redhose/pytest-25/test_runbook_substitution_pres0')\ndirectory = 'export files'\n\n    @pytest.mark.parametrize(\"directory\", [\"export files\", \"export (July)\", \"export's files\"])\n    def test_runbook_substitution_preserves_literal_paths(tmp_path, directory):\n        export_dir = tmp_path / directory\n        export_dir.mkdir()\n        sites, paths = write_fixture_csvs(export_dir)\n>       proc, result = run_documented(runbook_command(), sites, paths, \"synthetic\")\n                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\nanalysis/tests/test_runbook_rehearsal.py:92: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \nanalysis/tests/test_runbook_rehearsal.py:59: in run_documented\n    return proc, json.loads(proc.stdout)\n                 ^^^^^^^^^^^^^^^^^^^^^^^\n../../../ENTER/lib/python3.11/json/__init__.py:346: in loads\n    return _default_decoder.decode(s)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^\n../../../ENTER/lib/python3.11/json/decoder.py:337: in decode\n    obj, end = self.raw_decode(s, idx=_w(s, 0).end())\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = <json.decoder.JSONDecoder object at 0x10273cad0>, s = '', idx = 0\n\n    def raw_decode(self, s, idx=0):\n        \"\"\"Decode a JSON document from ``s`` (a ``str`` beginning with\n        a JSON document) and return a 2-tuple of the Python\n        representation and the index in ``s`` where the document ended.\n    \n        This can be used to decode a JSON document from a string that may\n        have extraneous data at the end.\n    \n        \"\"\"\n        try:\n            obj, end = self.scan_once(s, idx)\n        except StopIteration as err:\n>           raise JSONDecodeError(\"Expecting value\", s, err.value) from None\nE           json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)\n\n../../../ENTER/lib/python3.11/json/decoder.py:355: JSONDecodeError\n_______ test_runbook_substitution_preserves_literal_paths[export (July)] _______\n\ntmp_path = PosixPath('/private/var/folders/rm/1f4h8c954_58tny8x94fr7k40000gn/T/pytest-of-redhose/pytest-25/test_runbook_substitution_pres1')\ndirectory = 'export (July)'\n\n    @pytest.mark.parametrize(\"directory\", [\"export files\", \"export (July)\", \"export's files\"])\n    def test_runbook_substitution_preserves_literal_paths(tmp_path, directory):\n        export_dir = tmp_path / directory\n        export_dir.mkdir()\n        sites, paths = write_fixture_csvs(export_dir)\n>       proc, result = run_documented(runbook_command(), sites, paths, \"synthetic\")\n                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\nanalysis/tests/test_runbook_rehearsal.py:92: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \nanalysis/tests/test_runbook_rehearsal.py:59: in run_documented\n    return proc, json.loads(proc.stdout)\n                 ^^^^^^^^^^^^^^^^^^^^^^^\n../../../ENTER/lib/python3.11/json/__init__.py:346: in loads\n    return _default_decoder.decode(s)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^\n../../../ENTER/lib/python3.11/json/decoder.py:337: in decode\n    obj, end = self.raw_decode(s, idx=_w(s, 0).end())\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = <json.decoder.JSONDecoder object at 0x10273cad0>, s = '', idx = 0\n\n    def raw_decode(self, s, idx=0):\n        \"\"\"Decode a JSON document from ``s`` (a ``str`` beginning with\n        a JSON document) and return a 2-tuple of the Python\n        representation and the index in ``s`` where the document ended.\n    \n        This can be used to decode a JSON document from a string that may\n        have extraneous data at the end.\n    \n        \"\"\"\n        try:\n            obj, end = self.scan_once(s, idx)\n        except StopIteration as err:\n>           raise JSONDecodeError(\"Expecting value\", s, err.value) from None\nE           json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)\n\n../../../ENTER/lib/python3.11/json/decoder.py:355: JSONDecodeError\n______ test_runbook_substitution_preserves_literal_paths[export's files] _______\n\ntmp_path = PosixPath('/private/var/folders/rm/1f4h8c954_58tny8x94fr7k40000gn/T/pytest-of-redhose/pytest-25/test_runbook_substitution_pres2')\ndirectory = \"export's files\"\n\n    @pytest.mark.parametrize(\"directory\", [\"export files\", \"export (July)\", \"export's files\"])\n    def test_runbook_substitution_preserves_literal_paths(tmp_path, directory):\n        export_dir = tmp_path / directory\n        export_dir.mkdir()\n        sites, paths = write_fixture_csvs(export_dir)\n>       proc, result = run_documented(runbook_command(), sites, paths, \"synthetic\")\n                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\nanalysis/tests/test_runbook_rehearsal.py:92: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \nanalysis/tests/test_runbook_rehearsal.py:59: in run_documented\n    return proc, json.loads(proc.stdout)\n                 ^^^^^^^^^^^^^^^^^^^^^^^\n../../../ENTER/lib/python3.11/json/__init__.py:346: in loads\n    return _default_decoder.decode(s)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^\n../../../ENTER/lib/python3.11/json/decoder.py:337: in decode\n    obj, end = self.raw_decode(s, idx=_w(s, 0).end())\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = <json.decoder.JSONDecoder object at 0x10273cad0>, s = '', idx = 0\n\n    def raw_decode(self, s, idx=0):\n        \"\"\"Decode a JSON document from ``s`` (a ``str`` beginning with\n        a JSON document) and return a 2-tuple of the Python\n        representation and the index in ``s`` where the document ended.\n    \n        This can be used to decode a JSON document from a string that may\n        have extraneous data at the end.\n    \n        \"\"\"\n        try:\n            obj, end = self.scan_once(s, idx)\n        except StopIteration as err:\n>           raise JSONDecodeError(\"Expecting value\", s, err.value) from None\nE           json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)\n\n../../../ENTER/lib/python3.11/json/decoder.py:355: JSONDecodeError\n=========================== short test summary info ============================\nFAILED analysis/tests/test_runbook_rehearsal.py::test_runbook_substitution_preserves_literal_paths[export files]\nFAILED analysis/tests/test_runbook_rehearsal.py::test_runbook_substitution_preserves_literal_paths[export (July)]\nFAILED analysis/tests/test_runbook_rehearsal.py::test_runbook_substitution_preserves_literal_paths[export's files]\n3 failed, 7 deselected in 0.40s\n"
+  },
+  "green": [
+    {
+      "cmd": "PYTHONPATH=analysis python -c 'import sys,types; sys.modules[\"readline\"]=types.ModuleType(\"readline\"); import pytest; raise SystemExit(pytest.main([\"analysis/tests\",\"-q\"]))'",
+      "chunk_id": "5288cc",
+      "wall_time_seconds": 3.016457959,
+      "exit_code": 0,
+      "original_token_count": 25,
+      "output": "..........................................................               [100%]\n58 passed in 2.80s\n"
+    },
+    {
+      "cmd": "node tools/validate_phase1.mjs",
+      "chunk_id": "9858c9",
+      "wall_time_seconds": 0.000002792,
+      "exit_code": 0,
+      "original_token_count": 18,
+      "output": "Phase-1 static validation passed (6 sites; Z_MIN=1.0; four QA layers).\n"
+    },
+    {
+      "cmd": "node tools/test_temporal_qa.mjs",
+      "chunk_id": "95f660",
+      "wall_time_seconds": 0.000002834,
+      "exit_code": 0,
+      "original_token_count": 32,
+      "output": "Temporal QA: empty/nonempty S2 and Dynamic World branch/schema checks PASS; export wiring present. No Earth Engine execution.\n"
+    },
+    {
+      "cmd": "python -m compileall -q analysis/catanroads analysis/tests",
+      "chunk_id": "223719",
+      "wall_time_seconds": 0.00000275,
+      "exit_code": 0,
+      "original_token_count": 0,
+      "output": ""
+    },
+    {
+      "cmd": "git diff --check",
+      "chunk_id": "99351a",
+      "wall_time_seconds": 0.0000025,
+      "exit_code": 0,
+      "original_token_count": 0,
+      "output": ""
+    }
+  ]
+}

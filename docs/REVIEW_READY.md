@@ -1,5 +1,17 @@
 # CatanRoads — partial handoff, local software ready for review
 
+## Review follow-up — 2026-09-09
+
+The day-2 rehearsal now preserves literal file paths; 58 tests pass locally.
+See [review evidence and limitations](../evidence/review-2026-09-09/README.md).
+Older counts below are historical snapshots, not the amended candidate.
+
+## Latest follow-up — 2026-09-09
+
+[CR-D02 runbook rehearsal](../evidence/task-2026-09-09/README.md): the documented Phase-1
+gate command is now executed by tests on synthetic fixtures, so runbook and CLI cannot drift
+apart; 55 tests pass. No real-data result; CR-08 remains the gate.
+
 ## Latest follow-up — 2026-09-08
 
 [CR-D01 temporal QA review](../evidence/task-2026-09-08/README.md) supersedes the

@@ -72,10 +72,11 @@ python -m catanroads.phase1_gate --help
 
 The following paths are **placeholders for owner-produced files**, not existing
 results. Replace each with its downloaded export:
+Keep each path quoted, including when its directory or filename contains spaces.
 
 ```sh
 python -m catanroads.phase1_gate --sites config/sites.geojson \
-  --metrics PATH_TO_DEV_01.csv PATH_TO_DEV_02.csv PATH_TO_DEV_03.csv PATH_TO_NEGATIVE_01.csv \
+  --metrics "PATH_TO_DEV_01.csv" "PATH_TO_DEV_02.csv" "PATH_TO_DEV_03.csv" "PATH_TO_NEGATIVE_01.csv" \
   --evidence-kind earth-engine-export
 ```
 
