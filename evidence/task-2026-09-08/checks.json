@@ -1,0 +1,70 @@
+{
+  "date": "2026-09-08",
+  "base": "b4cee1fcb2d6e0cc62b4c48699fa692e7b774ef9",
+  "cwd": "/Users/redhose/Developer/daily-prs/2026-09-08/CatanRoads",
+  "runtime": "Python 3.11.8; Node v22.21.0",
+  "baseline": {
+    "chunk_id": "91bf58",
+    "wall_time_seconds": 0.778618583,
+    "exit_code": 0,
+    "original_token_count": 25,
+    "output": "...................................                                      [100%]\n35 passed in 0.60s\n"
+  },
+  "baseline_static": {
+    "chunk_id": "393840",
+    "wall_time_seconds": 0.000002709,
+    "exit_code": 0,
+    "original_token_count": 18,
+    "output": "Phase-1 static validation passed (6 sites; Z_MIN=1.0; four QA layers).\n"
+  },
+  "red_python": {
+    "chunk_id": "16a151",
+    "wall_time_seconds": 0.457875083,
+    "exit_code": 1,
+    "original_token_count": 1656,
+    "output": "FFFFFFFFFF.                                                              [100%]\n=================================== FAILURES ===================================\n___________________ test_invalid_scene_count_cannot_pass[-1] ___________________\n\nvalue = -1\n\n    @pytest.mark.parametrize(\"value\", [-1, 0.5, True, \"nan\", \"inf\", \"\"])\n    def test_invalid_scene_count_cannot_pass(value):\n        manifest, rows = counts_fixture()\n        rows[0][\"s2_scene_count_2018\"] = value\n>       assert evaluate(manifest, rows)[\"status\"] == \"INCONCLUSIVE\"\nE       AssertionError: assert 'SCREEN_PASS' == 'INCONCLUSIVE'\nE         \nE         - INCONCLUSIVE\nE         + SCREEN_PASS\n\nanalysis/tests/test_temporal_qa.py:20: AssertionError\n__________________ test_invalid_scene_count_cannot_pass[0.5] ___________________\n\nvalue = 0.5\n\n    @pytest.mark.parametrize(\"value\", [-1, 0.5, True, \"nan\", \"inf\", \"\"])\n    def test_invalid_scene_count_cannot_pass(value):\n        manifest, rows = counts_fixture()\n        rows[0][\"s2_scene_count_2018\"] = value\n>       assert evaluate(manifest, rows)[\"status\"] == \"INCONCLUSIVE\"\nE       AssertionError: assert 'SCREEN_PASS' == 'INCONCLUSIVE'\nE         \nE         - INCONCLUSIVE\nE         + SCREEN_PASS\n\nanalysis/tests/test_temporal_qa.py:20: AssertionError\n__________________ test_invalid_scene_count_cannot_pass[True] __________________\n\nvalue = True\n\n    @pytest.mark.parametrize(\"value\", [-1, 0.5, True, \"nan\", \"inf\", \"\"])\n    def test_invalid_scene_count_cannot_pass(value):\n        manifest, rows = counts_fixture()\n        rows[0][\"s2_scene_count_2018\"] = value\n>       assert evaluate(manifest, rows)[\"status\"] == \"INCONCLUSIVE\"\nE       AssertionError: assert 'SCREEN_PASS' == 'INCONCLUSIVE'\nE         \nE         - INCONCLUSIVE\nE         + SCREEN_PASS\n\nanalysis/tests/test_temporal_qa.py:20: AssertionError\n__________________ test_invalid_scene_count_cannot_pass[nan] ___________________\n\nvalue = 'nan'\n\n    @pytest.mark.parametrize(\"value\", [-1, 0.5, True, \"nan\", \"inf\", \"\"])\n    def test_invalid_scene_count_cannot_pass(value):\n        manifest, rows = counts_fixture()\n        rows[0][\"s2_scene_count_2018\"] = value\n>       assert evaluate(manifest, rows)[\"status\"] == \"INCONCLUSIVE\"\nE       AssertionError: assert 'SCREEN_PASS' == 'INCONCLUSIVE'\nE         \nE         - INCONCLUSIVE\nE         + SCREEN_PASS\n\nanalysis/tests/test_temporal_qa.py:20: AssertionError\n__________________ test_invalid_scene_count_cannot_pass[inf] ___________________\n\nvalue = 'inf'\n\n    @pytest.mark.parametrize(\"value\", [-1, 0.5, True, \"nan\", \"inf\", \"\"])\n    def test_invalid_scene_count_cannot_pass(value):\n        manifest, rows = counts_fixture()\n        rows[0][\"s2_scene_count_2018\"] = value\n>       assert evaluate(manifest, rows)[\"status\"] == \"INCONCLUSIVE\"\nE       AssertionError: assert 'SCREEN_PASS' == 'INCONCLUSIVE'\nE         \nE         - INCONCLUSIVE\nE         + SCREEN_PASS\n\nanalysis/tests/test_temporal_qa.py:20: AssertionError\n____________________ test_invalid_scene_count_cannot_pass[] ____________________\n\nvalue = ''\n\n    @pytest.mark.parametrize(\"value\", [-1, 0.5, True, \"nan\", \"inf\", \"\"])\n    def test_invalid_scene_count_cannot_pass(value):\n        manifest, rows = counts_fixture()\n        rows[0][\"s2_scene_count_2018\"] = value\n>       assert evaluate(manifest, rows)[\"status\"] == \"INCONCLUSIVE\"\nE       AssertionError: assert 'SCREEN_PASS' == 'INCONCLUSIVE'\nE         \nE         - INCONCLUSIVE\nE         + SCREEN_PASS\n\nanalysis/tests/test_temporal_qa.py:20: AssertionError\n_________________________ test_missing_qa_cannot_pass __________________________\n\n    def test_missing_qa_cannot_pass():\n        manifest, rows = counts_fixture()\n        del rows[0][\"s2_scene_count_2026\"]\n>       assert evaluate(manifest, rows)[\"status\"] == \"INCONCLUSIVE\"\nE       AssertionError: assert 'SCREEN_PASS' == 'INCONCLUSIVE'\nE         \nE         - INCONCLUSIVE\nE         + SCREEN_PASS\n\nanalysis/tests/test_temporal_qa.py:26: AssertionError\n_________________ test_no_early_scenes_cannot_support_baseline _________________\n\n    def test_no_early_scenes_cannot_support_baseline():\n        manifest, rows = counts_fixture()\n        for year in YEARS[:4]:\n            rows[0][f\"s2_scene_count_{year}\"] = 0\n>       assert evaluate(manifest, rows)[\"status\"] == \"INCONCLUSIVE\"\nE       AssertionError: assert 'SCREEN_PASS' == 'INCONCLUSIVE'\nE         \nE         - INCONCLUSIVE\nE         + SCREEN_PASS\n\nanalysis/tests/test_temporal_qa.py:33: AssertionError\n____________ test_one_recent_year_cannot_meet_two_year_requirement _____________\n\n    def test_one_recent_year_cannot_meet_two_year_requirement():\n        manifest, rows = counts_fixture()\n        for year in (2023, 2024, 2025):\n            rows[0][f\"s2_scene_count_{year}\"] = 0\n>       assert evaluate(manifest, rows)[\"status\"] == \"INCONCLUSIVE\"\nE       AssertionError: assert 'SCREEN_PASS' == 'INCONCLUSIVE'\nE         \nE         - INCONCLUSIVE\nE         + SCREEN_PASS\n\nanalysis/tests/test_temporal_qa.py:40: AssertionError\n_____________ test_missing_2018_is_retained_not_silently_replaced ______________\n\n    def test_missing_2018_is_retained_not_silently_replaced():\n        manifest, rows = counts_fixture()\n        original = deepcopy(rows)\n        rows[0][\"s2_scene_count_2018\"] = 0\n        rows[0][\"s2_scene_count_2023\"] = 0\n        rows[0][\"s2_scene_count_2024\"] = 0\n        result = evaluate(manifest, rows)\n        assert result[\"status\"] == \"SCREEN_PASS\"\n>       assert result[\"temporal_qa\"][rows[0][\"site_id\"]][\"missing_scene_years\"] == [2018, 2023, 2024]\n               ^^^^^^^^^^^^^^^^^^^^^\nE       KeyError: 'temporal_qa'\n\nanalysis/tests/test_temporal_qa.py:51: KeyError\n=========================== short test summary info ============================\nFAILED analysis/tests/test_temporal_qa.py::test_invalid_scene_count_cannot_pass[-1]\nFAILED analysis/tests/test_temporal_qa.py::test_invalid_scene_count_cannot_pass[0.5]\nFAILED analysis/tests/test_temporal_qa.py::test_invalid_scene_count_cannot_pass[True]\nFAILED analysis/tests/test_temporal_qa.py::test_invalid_scene_count_cannot_pass[nan]\nFAILED analysis/tests/test_temporal_qa.py::test_invalid_scene_count_cannot_pass[inf]\nFAILED analysis/tests/test_temporal_qa.py::test_invalid_scene_count_cannot_pass[]\nFAILED analysis/tests/test_temporal_qa.py::test_missing_qa_cannot_pass - Asse...\nFAILED analysis/tests/test_temporal_qa.py::test_no_early_scenes_cannot_support_baseline\nFAILED analysis/tests/test_temporal_qa.py::test_one_recent_year_cannot_meet_two_year_requirement\nFAILED analysis/tests/test_temporal_qa.py::test_missing_2018_is_retained_not_silently_replaced\n10 failed, 1 passed in 0.27s\n"
+  },
+  "red_js": {
+    "chunk_id": "a18fe1",
+    "wall_time_seconds": 0.000002084,
+    "exit_code": 1,
+    "original_token_count": 183,
+    "output": "node:internal/modules/run_main:123\n    triggerUncaughtException(\n    ^\n\nAssertionError [ERR_ASSERTION]: requested band absent\n    at Image.select (file:///Users/redhose/Developer/daily-prs/2026-09-08/CatanRoads/tools/test_temporal_qa.mjs:17:5)\n    at file:///Users/redhose/Developer/daily-prs/2026-09-08/CatanRoads/tools/test_temporal_qa.mjs:49:55\n    at ModuleJob.run (node:internal/modules/esm/module_job:343:25)\n    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:665:26)\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5) {\n  generatedMessage: false,\n  code: 'ERR_ASSERTION',\n  actual: false,\n  expected: true,\n  operator: '==',\n  diff: 'simple'\n}\n\nNode.js v22.21.0\n"
+  },
+  "green_python": {
+    "chunk_id": "11ab4d",
+    "wall_time_seconds": 1.241481959,
+    "exit_code": 0,
+    "original_token_count": 25,
+    "output": "................................................                         [100%]\n48 passed in 1.01s\n"
+  },
+  "green_js": {
+    "chunk_id": "1a7579",
+    "wall_time_seconds": 0.000001667,
+    "exit_code": 0,
+    "original_token_count": 32,
+    "output": "Temporal QA: empty/nonempty S2 and Dynamic World branch/schema checks PASS; export wiring present. No Earth Engine execution.\n"
+  },
+  "green_static": {
+    "chunk_id": "ca0ffa",
+    "wall_time_seconds": 0.000001458,
+    "exit_code": 0,
+    "original_token_count": 18,
+    "output": "Phase-1 static validation passed (6 sites; Z_MIN=1.0; four QA layers).\n"
+  },
+  "compile": {
+    "chunk_id": "102ee1",
+    "wall_time_seconds": 0.000001292,
+    "exit_code": 0,
+    "original_token_count": 0,
+    "output": ""
+  },
+  "diff_check": {
+    "chunk_id": "c64a74",
+    "wall_time_seconds": 0.000003542,
+    "exit_code": 0,
+    "original_token_count": 0,
+    "output": ""
+  },
+  "scope": "Synthetic development regression and source-path CLI checks only; no GEE execution or independent road validation."
+}

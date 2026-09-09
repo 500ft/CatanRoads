@@ -113,14 +113,23 @@ function maskS2(img) {
   return img.updateMask(clear);
 }
 
+// Missing years remain masked observations with the expected band schema, never
+// fabricated zero reflectance. Scene presence does not imply usable pixels.
+function medianOrMasked(collection, bands) {
+  var empty = ee.Image.constant(bands.map(function () { return 0; }))
+    .rename(bands).toFloat().updateMask(0);
+  return ee.Image(ee.Algorithms.If(collection.size().gt(0),
+    collection.median(), empty)).select(bands);
+}
+
 function julyS2(year) {
   var start = ee.Date.fromYMD(year, MONTH, 1);
-  return ee.ImageCollection('COPERNICUS/S2_SR_HARMONIZED')
+  var collection = ee.ImageCollection('COPERNICUS/S2_SR_HARMONIZED')
     .filterBounds(aoi)
     .filterDate(start, start.advance(1, 'month'))
     .filter(ee.Filter.lt('CLOUDY_PIXEL_PERCENTAGE', 40))
-    .map(maskS2)
-    .median()
+    .map(maskS2);
+  return medianOrMasked(collection, ['B2', 'B3', 'B4', 'B8', 'B11'])
     .clip(aoi)
     .set('year', year);
 }
@@ -231,11 +240,11 @@ var largeComponentMask = connectedCount.gte(MIN_COMPONENT_PIXELS)
 var DW_BANDS = ['built', 'crops', 'water'];
 function julyDynamicWorld(year) {
   var start = ee.Date.fromYMD(year, MONTH, 1);
-  return ee.ImageCollection('GOOGLE/DYNAMICWORLD/V1')
+  var collection = ee.ImageCollection('GOOGLE/DYNAMICWORLD/V1')
     .filterBounds(aoi)
     .filterDate(start, start.advance(1, 'month'))
-    .select(DW_BANDS)
-    .median()
+    .select(DW_BANDS);
+  return medianOrMasked(collection, DW_BANDS)
     .clip(aoi)
     .set('year', year);
 }
@@ -385,6 +394,10 @@ var gateRecord = ee.Feature(null, gateMetrics).set({
   persistence_min: PERSISTENCE_MIN,
   min_valid_recent_years: MIN_VALID_RECENT_YEARS,
   min_component_pixels: MIN_COMPONENT_PIXELS
+});
+// Retain machine-readable scene QA in each downloaded CSV, not only console text.
+earlyYears.concat(recentYears).forEach(function (year) {
+  gateRecord = gateRecord.set('s2_scene_count_' + year, countJuly(year));
 });
 Export.table.toDrive({
   collection: ee.FeatureCollection([gateRecord]),

@@ -1,5 +1,12 @@
 # CatanRoads — partial handoff, local software ready for review
 
+## Latest follow-up — 2026-09-08
+
+[CR-D01 temporal QA review](../evidence/task-2026-09-08/README.md) supersedes the
+old intake interface for current use. Eight scene-count columns are now required;
+48 Python tests and two Node checks pass locally. Original sprint evidence below
+is historical and hash-bound. Real-data evaluation remains blocked on CR-08.
+
 Prepared 2026-09-05; resumed and checked 2026-09-06. Budget: six workload days,
 30 focused hours per repository; estimates are not recorded time spent.
 

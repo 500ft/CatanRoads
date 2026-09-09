@@ -1,6 +1,6 @@
 # Phase-1 intake and external run boundary
 
-Updated 2026-09-06. No verified Mongolia result or Earth Engine execution is
+Updated 2026-09-08. No verified Mongolia result or Earth Engine execution is
 supplied by this sprint. Site flags remain false.
 
 ## Owner inputs, prepared before predictions
@@ -35,6 +35,33 @@ analysis_crs=EPSG:3857, analysis_scale_m=10, control_inner_m=200,
 control_outer_m=800, min_control_pixels=500, z_min=1, yearly_effect_min=0.02,
 persistence_min=2/3, min_valid_recent_years=2, min_component_pixels=50.
 Extra Earth Engine CSV columns are ignored; missing required columns are not.
+
+Temporal QA (required since 2026-09-08): `s2_scene_count_2018`,
+`s2_scene_count_2019`, `s2_scene_count_2020`, `s2_scene_count_2021`,
+`s2_scene_count_2023`, `s2_scene_count_2024`, `s2_scene_count_2025`,
+`s2_scene_count_2026`. The script now includes these in each CSV, not just the
+console run manifest. They count scenes remaining after date/AOI and scene-cloud
+filtering, **not cloud-free pixels or independent acquisitions**. Nonnegative
+integer counts, some early imagery and at least two recent years with scenes are
+necessary, not sufficient: the original per-pixel valid-year and 90% coverage
+requirements remain unchanged. Zero-scene years are retained in `temporal_qa`,
+not replaced with other years. A missing QA column is INCONCLUSIVE: regenerate
+old exports, never backfill guessed counts.
+
+An empty Sentinel-2 or Dynamic World annual collection now produces a fully
+masked image with the expected bands, not a bandless median or synthetic zero
+reflectance. Partial/all-masked scenes still depend on the pixel coverage gate.
+Google documents incomplete 2017–2018 L2 coverage in its
+[Sentinel-2 catalog](https://developers.google.com/earth-engine/datasets/catalog/COPERNICUS_S2_SR_HARMONIZED);
+the conditional follows the official
+[If API](https://developers.google.com/earth-engine/apidocs/ee-algorithms-if).
+`node tools/test_temporal_qa.mjs` tests local branch/schema behavior using a small
+test double; it does not authenticate an Earth Engine job or imagery.
+
+Owner runtime check: retain the eight counts and exported `n_valid`/coverage
+layers; inspect a zero-scene year if one occurs and confirm it stays masked.
+If all early years or fewer than two recent years have scenes, retain the failed
+run and report INCONCLUSIVE. Do not choose replacement sites/years from outcomes.
 
 Install the local package:
 
