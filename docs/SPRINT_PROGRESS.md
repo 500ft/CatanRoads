@@ -1,5 +1,15 @@
 # Sprint progress — CatanRoads
 
+## 2026-09-09 — CR-D02 runbook rehearsal
+
+Executed the Phase-1 runbook's gate command *as written in the document* against synthetic
+fixtures, through a subprocess, in [7 tests](../analysis/tests/test_runbook_rehearsal.py): synthetic
+→ `DEVELOPMENT_ONLY` (3); the committed unverified manifest → `INCONCLUSIVE` (2) even with good
+metrics; missing export → `INCONCLUSIVE`, no traceback; exit table equals the CLI mapping. Renaming a
+flag or altering the exit table in the runbook fails the suite. Full suite 55 passed. Software
+preparation only; CR-08 unchanged. [Verification](../evidence/task-2026-09-09/README.md).
+Branch `task/priority-two-20260909`.
+
 ## 2026-09-08 — CR-D01 temporal QA follow-up
 
 Completed one bounded P1 software task after the original 30h sprint; its original
