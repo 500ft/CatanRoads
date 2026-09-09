@@ -1,5 +1,13 @@
 # CatanRoads — partial handoff, local software ready for review
 
+## Day-3 preparation — 2026-09-09
+
+Five generated-worksheet tests cover holdout omission, unchanged eligibility, future site inclusion, duplicate IDs and committed output consistency. 63 analysis tests and both Node checks pass. All six sites remain unverified; no imagery or Earth Engine evaluation occurred.
+
+Review [DAY3_PLAN.md](DAY3_PLAN.md), [deliverable](SITE_VERIFICATION_WORKSHEET.md), and [commands/evidence](../evidence/task-day3-2026-09-09/README.md). Base: `346b942b6de2ade58d40f2dfe367cbd086370d87`; new PR branch: `task/day-three-20260909`. No original Owner/External gate is closed. Final source identity is the PR head, reported in its delivery record rather than embedded circularly here.
+
+No feature confirmation without seeing the dated source image; no Earth Engine or holdout evaluation implied.
+
 ## Review follow-up — 2026-09-09
 
 The day-2 rehearsal now preserves literal file paths; 58 tests pass locally.

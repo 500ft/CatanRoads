@@ -1,5 +1,11 @@
 # Sprint progress — CatanRoads
 
+## Day-3 work — 2026-09-09
+
+Both reviewed PR layers merged into main; new work starts from `346b942b6de2ade58d40f2dfe367cbd086370d87` on `task/day-three-20260909`. Five generated-worksheet tests cover holdout omission, unchanged eligibility, future site inclusion, duplicate IDs and committed output consistency. 63 analysis tests and both Node checks pass. All six sites remain unverified; no imagery or Earth Engine evaluation occurred.
+
+The [evidence record](../evidence/task-day3-2026-09-09/README.md) contains checks and limits. Work is locally verified and not yet recorded here as pushed/merged. Current edits belong to this task; original checkouts were preserved. Next: finish verification, commit the bounded change and open the new PR; preserve all stated external gates.
+
 ## 2026-09-09 — review amendment to CR-D02
 
 Reproduced three filename-handling failures in the rehearsal; fixed literal
