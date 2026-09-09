@@ -2,6 +2,8 @@
 
 ## Day-3 work — 2026-09-09
 
+Delivery update: the preparation was committed as 500ft and pushed; [day-3 PR](https://github.com/500ft/CatanRoads/pull/8) is open against main. Initial implementation source: `b3e7797f62ac2a8b1c0cd630b5d2455a9bfb2b52` (later review/documentation commits are visible in the PR). This supersedes the pre-push stopping state below. Original day-1/day-2 PRs are merged; this new PR is not merged. Resume from the named unresolved project gates in [DAY3_PLAN.md](DAY3_PLAN.md), not from the already completed push step.
+
 Both reviewed PR layers merged into main; new work starts from `346b942b6de2ade58d40f2dfe367cbd086370d87` on `task/day-three-20260909`. Five generated-worksheet tests cover holdout omission, unchanged eligibility, future site inclusion, duplicate IDs and committed output consistency. 63 analysis tests and both Node checks pass. All six sites remain unverified; no imagery or Earth Engine evaluation occurred.
 
 The [evidence record](../evidence/task-day3-2026-09-09/README.md) contains checks and limits. Work is locally verified and not yet recorded here as pushed/merged. Current edits belong to this task; original checkouts were preserved. Next: finish verification, commit the bounded change and open the new PR; preserve all stated external gates.
