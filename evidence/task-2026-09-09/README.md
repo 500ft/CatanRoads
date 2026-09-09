@@ -1,6 +1,11 @@
 
 # CR-D02 verification — 2026-09-09
 
+Review amendment: [three reproduced path failures, corrections and 58-test
+verification](../review-2026-09-09/README.md). The 55-test results below describe
+the original day-2 head, not the revised candidate. Importability alone does not
+verify the package-install step.
+
 Base: head of `task/priority-one-20260908` (PR #6). Deliverable:
 [`analysis/tests/test_runbook_rehearsal.py`](../../analysis/tests/test_runbook_rehearsal.py).
 Authoritative status: [SPRINT_TASKS.csv](../../docs/SPRINT_TASKS.csv).

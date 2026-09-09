@@ -1,5 +1,11 @@
 # CatanRoads — partial handoff, local software ready for review
 
+## Review follow-up — 2026-09-09
+
+The day-2 rehearsal now preserves literal file paths; 58 tests pass locally.
+See [review evidence and limitations](../evidence/review-2026-09-09/README.md).
+Older counts below are historical snapshots, not the amended candidate.
+
 ## Latest follow-up — 2026-09-09
 
 [CR-D02 runbook rehearsal](../evidence/task-2026-09-09/README.md): the documented Phase-1

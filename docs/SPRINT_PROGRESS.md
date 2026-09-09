@@ -1,5 +1,15 @@
 # Sprint progress — CatanRoads
 
+## 2026-09-09 — review amendment to CR-D02
+
+Reproduced three filename-handling failures in the rehearsal; fixed literal
+argument substitution and clarified that importability is not package-install
+validation. Full suite now 58 passed; both Node checks, compile and whitespace
+pass. Enabled CI for the existing manual stack's base; hosted status remains
+separate until observed. [Review evidence](../evidence/review-2026-09-09/README.md).
+CR-08 and all site/measurement flags remain unchanged. Review branch
+`review/day-two-20260909`; delivery will amend PR #7, not merge either layer.
+
 ## 2026-09-09 — CR-D02 runbook rehearsal
 
 Executed the Phase-1 runbook's gate command *as written in the document* against synthetic

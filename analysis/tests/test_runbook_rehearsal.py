@@ -9,7 +9,7 @@ Synthetic fixtures only; nothing here establishes any Mongolia result. The synth
 required to exit DEVELOPMENT_ONLY (3), and the real, unverified sites manifest is required
 to exit INCONCLUSIVE (2) even with well-formed metrics -- the two outcomes the runbook promises.
 """
-import csv, json, re, subprocess, sys
+import csv, json, re, shlex, subprocess, sys
 from pathlib import Path
 import pytest
 
@@ -51,17 +51,23 @@ def write_fixture_csvs(tmp_path: Path):
 
 
 def run_documented(cmd: str, sites: Path, paths, kind: str):
-    for ph, p in zip(PLACEHOLDERS, paths):
-        cmd = cmd.replace(ph, str(p))
-    cmd = cmd.replace("config/sites.geojson", str(sites)).replace("--evidence-kind earth-engine-export", f"--evidence-kind {kind}")
-    cmd = cmd.replace("python -m", f"{sys.executable} -m", 1)
-    proc = subprocess.run(cmd, shell=True, cwd=ROOT, capture_output=True, text=True)
+    # Parse the documented invocation before substituting literal input paths.
+    # Downloads with spaces or apostrophes are arguments, not shell syntax.
+    substitutions = dict(zip(PLACEHOLDERS, map(str, paths)))
+    substitutions.update({"config/sites.geojson": str(sites), "earth-engine-export": kind})
+    argv = [substitutions.get(token, token) for token in shlex.split(cmd)]
+    assert argv[:2] == ["python", "-m"], "expected a documented Python module invocation"
+    argv[0] = sys.executable
+    proc = subprocess.run(argv, cwd=ROOT, capture_output=True, text=True)
+    assert proc.stdout.strip(), f"documented command emitted no JSON: {proc.stderr}"
     return proc, json.loads(proc.stdout)
 
 
-def test_runbook_install_step_makes_the_cli_importable():
-    """Runbook step 1: `pip install -e ./analysis`. Every later test shells out to the installed CLI,
-    so fail here, with the fix named, rather than with a JSON decode error downstream."""
+def test_runbook_cli_is_importable_in_the_test_environment():
+    """Check the test environment, not package installation or distribution.
+
+    PYTHONPATH can also make this pass; no install is performed by this test.
+    """
     proc = subprocess.run([sys.executable, "-m", "catanroads.phase1_gate", "--help"], cwd=ROOT, capture_output=True, text=True)
     assert proc.returncode == 0, ("catanroads is not importable as a module; run the runbook's install step "
                                   "`python -m pip install -e ./analysis --no-deps` first.\n" + proc.stderr[-300:])
@@ -81,6 +87,17 @@ def test_documented_command_on_synthetic_fixtures_is_development_only(tmp_path):
     proc, result = run_documented(runbook_command(), sites, paths, "synthetic")
     assert result["status"] == "DEVELOPMENT_ONLY", result.get("errors")
     assert proc.returncode == EXIT_CODES["DEVELOPMENT_ONLY"]
+    assert set(result["input_sha256"]) == {str(sites), *map(str, paths)}
+
+
+@pytest.mark.parametrize("directory", ["export files", "export (July)", "export's files"])
+def test_runbook_substitution_preserves_literal_paths(tmp_path, directory):
+    export_dir = tmp_path / directory
+    export_dir.mkdir()
+    sites, paths = write_fixture_csvs(export_dir)
+    proc, result = run_documented(runbook_command(), sites, paths, "synthetic")
+    assert proc.returncode == EXIT_CODES["DEVELOPMENT_ONLY"], proc.stderr
+    assert result["status"] == "DEVELOPMENT_ONLY"
     assert set(result["input_sha256"]) == {str(sites), *map(str, paths)}
 
 
