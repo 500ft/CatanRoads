@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 420" role="img" aria-labelledby="title desc">
+  <title id="title">Informal Road Mapping — conceptual overview</title>
+  <desc id="desc">The intended method screens positive surface disturbance, extracts candidate corridors and requires dated-image confirmation. Real-site evaluation remains gated; only synthetic extraction is demonstrated.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#101e32"/><stop offset="1" stop-color="#162f43"/>
+    </linearGradient>
+    <marker id="arrow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6" fill="none" stroke="#78c9cc" stroke-width="1.2"/></marker>
+  </defs>
+  <rect width="1200" height="420" rx="18" fill="url(#background)"/>
+  <path d="M48 43 H91" stroke="#7de0d6" stroke-width="4"/>
+  <g font-family="Arial, Helvetica, sans-serif">
+    <text x="106" y="49" fill="#b4c6d7" font-size="14" font-weight="700" letter-spacing="1.8">GEOSPATIAL RESEARCH</text>
+    <text x="48" y="117" fill="#f5f8fc" font-size="43" font-weight="700">Informal Road Mapping</text>
+    <text x="48" y="154" fill="#d3deea" font-size="21">Persistent surface disturbance as a candidate-road signal.</text>
+    <g transform="translate(48,202)">
+      <rect width="344" height="152" rx="10" fill="#1d354b" stroke="#526c83"/>
+      <text x="22" y="29" fill="#84e0d5" font-size="15" font-weight="700">01</text>
+      <text x="57" y="29" fill="#c8d6e3" font-size="12" font-weight="700" letter-spacing="0.7">CODE / UNVERIFIED SITES</text>
+      <text x="22" y="75" fill="#ffffff" font-size="25" font-weight="700">Screen disturbance</text>
+      <text x="22" y="111" fill="#d3deea" font-size="18">Same-season satellite baselines</text>
+    </g>
+    <path d="M398 278 H410" stroke="#78c9cc" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <g transform="translate(416,202)">
+      <rect width="344" height="152" rx="10" fill="#1d354b" stroke="#526c83"/>
+      <text x="22" y="29" fill="#84e0d5" font-size="15" font-weight="700">02</text>
+      <text x="57" y="29" fill="#c8d6e3" font-size="12" font-weight="700" letter-spacing="0.7">SYNTHETIC</text>
+      <text x="22" y="75" fill="#ffffff" font-size="25" font-weight="700">Extract corridors</text>
+      <text x="22" y="111" fill="#d3deea" font-size="18">Ridge and component tests</text>
+    </g>
+    <path d="M766 278 H778" stroke="#78c9cc" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <g transform="translate(784,202)">
+      <rect width="344" height="152" rx="10" fill="#1d354b" stroke="#526c83"/>
+      <text x="22" y="29" fill="#84e0d5" font-size="15" font-weight="700">03</text>
+      <text x="57" y="29" fill="#c8d6e3" font-size="12" font-weight="700" letter-spacing="0.7">PENDING</text>
+      <text x="22" y="75" fill="#ffffff" font-size="25" font-weight="700">Confirm candidates</text>
+      <text x="22" y="111" fill="#d3deea" font-size="18">Dated high-resolution imagery</text>
+    </g>
+    <text x="48" y="391" fill="#b4c6d7" font-size="13" letter-spacing="1.1">CONCEPTUAL OVERVIEW · NOT MEASURED OUTPUT</text>
+    <text x="1152" y="391" fill="#b4c6d7" text-anchor="end" font-size="13">SYNTHETIC PROTOTYPE</text>
+  </g>
+</svg>

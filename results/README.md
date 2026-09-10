@@ -2,8 +2,9 @@
 
 Exported figures and analysis outputs.
 
-The main [`README`](../README.md) displays **`ndvi_change.png`** — a legacy
-full-field-rendering placeholder. Do not replace it with a claimed result until
+The main [`README`](../README.md) displays the synthetic method demonstration.
+**`ndvi_change.png`** remains a legacy full-field-rendering placeholder in this
+directory. Do not replace it with a claimed result until
 the sites are verified and the pre-registered Phase-1 gate outcome is recorded.
 
 ## Workflow

@@ -32,3 +32,7 @@ jobs:
         run: node tools/validate_phase1.mjs
       - name: Test temporal QA branches locally (not Earth Engine runtime)
         run: node tools/test_temporal_qa.mjs
+      - name: Check README links, identity and negative controls
+        run: |
+          python tools/check_presentation.py . "Informal Road Mapping" informal-road-mapping
+          python tools/test_presentation.py

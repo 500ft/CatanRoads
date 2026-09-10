@@ -1,0 +1,58 @@
+{
+  "date": "2026-09-10",
+  "old_repository": "CatanRoads",
+  "repository": "500ft/informal-road-mapping",
+  "base_commit": "6ce841289d5fa53a552b0b3effd0caf6f03f2e9e",
+  "branch": "docs/professional-presentation-20260910",
+  "runtime": "Python 3.11.8\nv22.21.0\ngit version 2.39.5 (Apple Git-154)\n",
+  "baseline_commands": [
+    "PYTHONPATH=analysis python -m catanroads.site_worksheet --check",
+    "PYTHONPATH=analysis python -c 'import sys,types; sys.modules[\"readline\"]=types.ModuleType(\"readline\"); import pytest; raise SystemExit(pytest.main([\"analysis/tests\",\"-q\"]))'",
+    "node tools/validate_phase1.mjs",
+    "node tools/test_temporal_qa.mjs"
+  ],
+  "baseline_start": {
+    "chunk_id": "3e6eb8",
+    "wall_time_seconds": 1.0022635,
+    "session_id": 66131,
+    "original_token_count": 22,
+    "output": "Development worksheet consistent; no sites verified and no imagery inspected\n........"
+  },
+  "baseline_completion": {
+    "chunk_id": "5a30ec",
+    "wall_time_seconds": 8.33e-7,
+    "exit_code": 0,
+    "original_token_count": 72,
+    "output": ".......................................................          [100%]\n63 passed in 2.90s\nPhase-1 static validation passed (6 sites; Z_MIN=1.0; four QA layers).\nTemporal QA: empty/nonempty S2 and Dynamic World branch/schema checks PASS; export wiring present. No Earth Engine execution.\n"
+  },
+  "final_start": {
+    "chunk_id": "bc3873",
+    "wall_time_seconds": 1.002134083,
+    "session_id": 32497,
+    "original_token_count": 27,
+    "output": "Development worksheet consistent; no sites verified and no imagery inspected\n............................"
+  },
+  "final_completion": {
+    "chunk_id": "ffdc6f",
+    "wall_time_seconds": 0.000001042,
+    "exit_code": 0,
+    "original_token_count": 67,
+    "output": "...................................          [100%]\n63 passed in 2.56s\nPhase-1 static validation passed (6 sites; Z_MIN=1.0; four QA layers).\nTemporal QA: empty/nonempty S2 and Dynamic World branch/schema checks PASS; export wiring present. No Earth Engine execution.\n"
+  },
+  "presentation_gate": {
+    "chunk_id": "cc6481",
+    "wall_time_seconds": 0.065520333,
+    "exit_code": 0,
+    "original_token_count": 71,
+    "output": "{\n  \"repository\": \"informal-road-mapping\",\n  \"files_checked\": 5,\n  \"local_links_checked\": 68,\n  \"external_links_not_fetched\": 10,\n  \"issues\": [],\n  \"scientific_validation\": false\n}\n....\n----------------------------------------------------------------------\nRan 4 tests in 0.112s\n\nOK\n"
+  },
+  "preservation": {
+    "chunk_id": "32be26",
+    "wall_time_seconds": 0.00000675,
+    "exit_code": 0,
+    "original_token_count": 36,
+    "output": "4\t0\t.github/workflows/ci.yml\n107\t182\tREADME.md\n17\t2\tdocs/figure-manifest.json\n3\t2\tresults/README.md\n6ce841289d5fa53a552b0b3effd0caf6f03f2e9e\n"
+  },
+  "scope": "Repository identity and presentation; no new scientific results or physical tests.",
+  "hosted_checks": "Verify against the candidate commit on the presentation PR; not claimed by this local snapshot."
+}
