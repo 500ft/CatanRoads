@@ -1,0 +1,20 @@
+{
+  "date": "2026-09-09",
+  "base": "346b942b6de2ade58d40f2dfe367cbd086370d87",
+  "command": "PYTHONPATH=analysis python -c 'import sys,types; sys.modules[\"readline\"]=types.ModuleType(\"readline\"); import pytest; raise SystemExit(pytest.main([\"analysis/tests\",\"-q\"]))'; node tools/validate_phase1.mjs; node tools/test_temporal_qa.mjs",
+  "initial": {
+    "chunk_id": "6171e8",
+    "wall_time_seconds": 1.000574917,
+    "session_id": 5221,
+    "original_token_count": 21,
+    "output": "346b942b6de2ade58d40f2dfe367cbd086370d87\nPython 3.11.8\n............................"
+  },
+  "completion": {
+    "chunk_id": "486766",
+    "wall_time_seconds": 5.84e-7,
+    "exit_code": 0,
+    "original_token_count": 67,
+    "output": "..............................               [100%]\n58 passed in 3.06s\nPhase-1 static validation passed (6 sites; Z_MIN=1.0; four QA layers).\nTemporal QA: empty/nonempty S2 and Dynamic World branch/schema checks PASS; export wiring present. No Earth Engine execution.\n"
+  },
+  "scope": "Baseline checks are repository integrity checks, not scientific validation"
+}
