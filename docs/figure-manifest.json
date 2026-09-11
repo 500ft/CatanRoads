@@ -28,7 +28,7 @@
       "outputs": [
         "results/ndvi_change.png"
       ],
-      "boundary": "Legacy full-field-rendering placeholder displayed by the top-level README. Not a claimed result.",
+      "boundary": "Legacy full-field-rendering placeholder retained in results/; not displayed as the README's main evidence and not a claimed Phase-1 result.",
       "status": "validation pending",
       "blocking_dependency": "dated reference-imagery provenance frozen for all three development sites and negative-01 in config/sites.geojson, then the pre-registered Phase-1 gate run per results/README.md"
     },
@@ -41,7 +41,22 @@
       "outputs": [
         "assets/method.png"
       ],
-      "boundary": "Explanatory diagram referenced from README.md; no generator and no underlying measurement."
+      "boundary": "Explanatory diagram retained through docs/START_HERE.md; no generator and no underlying measurement."
+    },
+    {
+      "id": "project-overview-2026-09-10",
+      "evidence_type": "hand_authored",
+      "generator": null,
+      "command": null,
+      "inputs": [
+        "docs/design.md",
+        "docs/PHASE1_RUNBOOK.md",
+        "analysis/README.md"
+      ],
+      "outputs": [
+        "docs/media/project-overview.svg"
+      ],
+      "boundary": "Original conceptual overview; source and accessibility notes in docs/REPOSITORY_IDENTITY.md. No imagery result, model output or site verification."
     }
   ],
   "figure_comparison_policy": {
