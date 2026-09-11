@@ -76,3 +76,7 @@ as permission to inspect the held-out site.
 
 See [repository identity notes](REPOSITORY_IDENTITY.md) for the rename,
 unchanged package names and presentation references.
+
+## September 11 completion correction
+
+Read the [item-by-item correction](COMPLETION_RECONCILIATION.md) before interpreting a prepared protocol, software check, or search export as a completed research gate. It identifies actual deliverables and the remaining measurement, review, or source-reading work separately.
