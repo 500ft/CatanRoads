@@ -50,3 +50,23 @@ processed in Google Earth Engine."* `compose_figure.py` bakes this line in.
 
 Do **not** commit raw imagery exports here — GeoTIFFs and archives are ignored by
 `.gitignore` to keep the repo light. Keep only finished figures.
+
+
+## `extractor_stress_cases.json` — where the extractor detects, misses, or fabricates (CR-R03, 2026-09-12)
+
+Ten fixed synthetic cases (`analysis/catanroads/stress_cases.py`), each with its own truth mask; scored by pixel recall/precision within 2 px and by false-candidate count. Regenerate with `python -m catanroads.stress_cases`; `tests/test_stress_cases.py` pins the observed behaviour. **Synthetic constructions only — nothing here is imagery or a site result.**
+
+| case | candidates | false | pixel recall | verdict |
+|---|---:|---:|---:|---|
+| demo_reference | 6 | 0 | 0.92 | the favourable demo, for scale |
+| wide_corridor (13 px) | 1 | 0 | 1.00 | detects |
+| low_snr (3× noise) | 1 | 0 | 1.00 | detects, but reports width 53 px for a 3 px corridor |
+| gradient_background | 3 | 2 | 1.00 | detects, plus two small false candidates on the ramp |
+| tight_curve (hairpin) | 1 | 0 | 1.00 | detects, **misrepresents**: one straight 128 × 22 px segment |
+| faint_corridor (1.15 × thresh) | 7 | 0 | 0.93 | detects, **fragmented** into seven pieces |
+| **crossing** | 0 | 0 | 0.00 | **misses both** roads: the union component fails `min_elongation` |
+| **short_segments** (9 px dashes) | 0 | 0 | 0.00 | **misses**: every dash is below `min_length_px` |
+| **linear_confound_riverbank** | 1 | 1 | — | **fabricates**: a river bank ranks like a strong road (precision 0) |
+| speckle_only (up to 4000 specks) | 0 | 0 | — | robust: no false candidates |
+
+Detection cliff: the same corridor at 1.3 / 1.15 / 1.05 / 1.0 / 0.9 × `disturb_thresh` gives recall 1.00 / 0.93 / 0.48 / 0.27 / 0.00. Consequences for the false-positive taxonomy (CR-09): linear non-road features are the failure class the extractor cannot see; junctions and dashed tracks are the miss classes; width and straight-segment summaries are not trustworthy under noise or curvature.
